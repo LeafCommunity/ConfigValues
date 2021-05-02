@@ -17,12 +17,4 @@ public interface DefaultYamlValue<V> extends DefaultKeyValue<ConfigurationSectio
     {
         return YamlValues.DEFAULT_TYPE;
     }
-    
-    // TODO: implement upstream
-    default boolean setAsDefaultIfUnset(ConfigurationSection section)
-    {
-        if (isSet(section)) { return false; }
-        set(section, getDefaultValue());
-        return true;
-    }
 }

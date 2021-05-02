@@ -71,17 +71,17 @@
             <version>0.2.0</version>
             <!-- Note: scope must be visible to dependent projects otherwise nullness annotations will not work as intended -->
         </dependency>
-        <!-- Valuables (via jitpack.io, temporarily) -->
-        <dependency>
-            <groupId>com.github.rezzedup</groupId>
-            <artifactId>valuables</artifactId>
-            <version>8655685191</version>
-        </dependency>
         <!-- Constants (via jitpack.io, temporarily) -->
         <dependency>
             <groupId>com.github.rezzedup</groupId>
             <artifactId>constants</artifactId>
             <version>cf5f9f7866</version>
+        </dependency>
+        <!-- Valuables (via jitpack.io, temporarily) -->
+        <dependency>
+            <groupId>com.github.rezzedup</groupId>
+            <artifactId>valuables</artifactId>
+            <version>4518fa9c41</version>
         </dependency>
     </dependencies>
 

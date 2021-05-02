@@ -170,19 +170,19 @@ public class YamlDataFile implements UpdatableYamlDataSource
         for (YamlValue<?> value : defaults)
         {
             if (!(value instanceof DefaultYamlValue<?>)) { continue; }
-            if (((DefaultYamlValue<?>) value).setAsDefaultIfUnset(data)) { updated(true); }
+            ((DefaultYamlValue<?>) value).setAsDefaultIfUnset(data);
         }
         
         migrateValues(defaults, data);
     }
     
-    public static void write(Path filePath, String contents, Consumer<? super IOException> exceptions)
+    protected static void write(Path filePath, String contents, Consumer<? super IOException> exceptions)
     {
         try { Files.writeString(filePath, contents); }
         catch (IOException e) { exceptions.accept(e); }
     }
     
-    public static void backup(Path existingFilePath, Path backupFilePath, Consumer<? super IOException> exceptions)
+    protected static void backup(Path existingFilePath, Path backupFilePath, Consumer<? super IOException> exceptions)
     {
         // Nothing to back up.
         if (!Files.isRegularFile(existingFilePath)) { return; }
