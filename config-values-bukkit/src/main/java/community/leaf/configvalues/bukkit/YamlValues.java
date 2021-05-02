@@ -7,6 +7,7 @@
  */
 package community.leaf.configvalues.bukkit;
 
+import com.rezzedup.util.constants.types.TypeCapture;
 import org.bukkit.configuration.ConfigurationSection;
 import pl.tlinkowski.annotation.basic.NullOr;
 
@@ -19,6 +20,18 @@ import java.util.function.BiFunction;
 class YamlValues
 {
     private YamlValues() { throw new UnsupportedOperationException(); }
+    
+    //
+    //  Type tokens
+    //
+    
+    static final TypeCapture<YamlValue<?>> TYPE = new TypeCapture<>() {};
+    
+    static final TypeCapture<DefaultYamlValue<?>> DEFAULT_TYPE = new TypeCapture<>() {};
+    
+    //
+    //  Adapters
+    //
     
     static final YamlAdapter<String> STRING = adapter(ConfigurationSection::getString);
     
@@ -34,6 +47,10 @@ class YamlValues
     
     static final YamlAdapter<List<Map<?, ?>>> MAP_LIST = adapter(ConfigurationSection::getMapList);
     
+    //
+    //  Factories
+    //
+    
     static <V> YamlAdapter<V> adapter(BiFunction<ConfigurationSection, String, V> getter)
     {
         return new AdapterImpl<>(getter);
@@ -43,6 +60,10 @@ class YamlValues
     {
         return new BuilderImpl<>(key, adapter);
     }
+    
+    //
+    //  Implementations
+    //
     
     static class AdapterImpl<V> implements YamlAdapter<V>
     {

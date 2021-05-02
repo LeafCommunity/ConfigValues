@@ -7,7 +7,22 @@
  */
 package community.leaf.configvalues.bukkit;
 
+import com.rezzedup.util.constants.types.TypeCapture;
 import com.rezzedup.util.valuables.DefaultKeyValue;
 import org.bukkit.configuration.ConfigurationSection;
 
-public interface DefaultYamlValue<V> extends DefaultKeyValue<ConfigurationSection, String, V>, YamlValue<V> {}
+public interface DefaultYamlValue<V> extends DefaultKeyValue<ConfigurationSection, String, V>, YamlValue<V>
+{
+    static TypeCapture<DefaultYamlValue<?>> type()
+    {
+        return YamlValues.DEFAULT_TYPE;
+    }
+    
+    // TODO: implement upstream
+    default boolean setAsDefaultIfUnset(ConfigurationSection section)
+    {
+        if (isSet(section)) { return false; }
+        set(section, getDefaultValue());
+        return true;
+    }
+}

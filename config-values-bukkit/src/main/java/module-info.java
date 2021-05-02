@@ -7,10 +7,12 @@
  */
 module community.leaf.configvalues.bukkit
 {
+    requires transitive com.rezzedup.util.constants;
     requires transitive com.rezzedup.util.valuables;
     
     requires static org.bukkit;
     requires static pl.tlinkowski.annotation.basic;
     
     exports community.leaf.configvalues.bukkit;
+    exports community.leaf.configvalues.bukkit.data;
 }

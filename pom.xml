@@ -77,6 +77,12 @@
             <artifactId>valuables</artifactId>
             <version>8655685191</version>
         </dependency>
+        <!-- Constants (via jitpack.io, temporarily) -->
+        <dependency>
+            <groupId>com.github.rezzedup</groupId>
+            <artifactId>constants</artifactId>
+            <version>cf5f9f7866</version>
+        </dependency>
     </dependencies>
 
     <build>

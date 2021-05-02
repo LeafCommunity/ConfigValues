@@ -7,6 +7,7 @@
  */
 package community.leaf.configvalues.bukkit;
 
+import com.rezzedup.util.constants.types.TypeCapture;
 import com.rezzedup.util.valuables.KeyValue;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -15,6 +16,11 @@ import java.util.Map;
 
 public interface YamlValue<V> extends KeyValue<ConfigurationSection, String, V>
 {
+    static TypeCapture<YamlValue<?>> type()
+    {
+        return YamlValues.TYPE;
+    }
+    
     static <V> Builder<V> of(String key, YamlAdapter<V> adapter)
     {
         return YamlValues.builder(key, adapter);
