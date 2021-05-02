@@ -9,9 +9,9 @@
     <packaging>pom</packaging>
     <version>${revision}</version> <!-- Change the version number in .mvn/maven.config -->
 
-    <name>ConfigValuables</name>
+    <name>ConfigValues</name>
     <inceptionYear>2021</inceptionYear>
-    <description>Build and schedule tasks.</description>
+    <description>Get and set config values.</description>
 
     <licenses>
         <license>
@@ -28,14 +28,14 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/LeafCommunity/ConfigValuables.git</connection>
-        <developerConnection>scm:git:ssh://github.com:LeafCommunity/ConfigValuables.git</developerConnection>
-        <url>http://github.com/LeafCommunity/ConfigValuables</url>
+        <connection>scm:git:git://github.com/LeafCommunity/ConfigValues.git</connection>
+        <developerConnection>scm:git:ssh://github.com:LeafCommunity/ConfigValues.git</developerConnection>
+        <url>http://github.com/LeafCommunity/ConfigValues</url>
     </scm>
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/LeafCommunity/ConfigValuables/issues</url>
+        <url>https://github.com/LeafCommunity/ConfigValues/issues</url>
     </issueManagement>
 
     <modules>
@@ -50,7 +50,7 @@
         <!-- License headers -->
         <license.header.year>${project.inceptionYear}</license.header.year>
         <license.header.owner>RezzedUp</license.header.owner>
-        <license.header.url>https://github.com/LeafCommunity/ConfigValuables</license.header.url>
+        <license.header.url>https://github.com/LeafCommunity/ConfigValues</license.header.url>
 
         <!-- Dependency versions -->
         <versions.minecraft.spigot>1.16.5-R0.1-SNAPSHOT</versions.minecraft.spigot>
