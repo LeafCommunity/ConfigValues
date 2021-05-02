@@ -170,7 +170,7 @@ public class YamlDataFile implements UpdatableYamlDataSource
         for (YamlValue<?> value : defaults)
         {
             if (!(value instanceof DefaultYamlValue<?>)) { continue; }
-            ((DefaultYamlValue<?>) value).setAsDefaultIfUnset(data);
+            setAsDefaultIfUnset((DefaultYamlValue<?>) value);
         }
         
         migrateValues(defaults, data);

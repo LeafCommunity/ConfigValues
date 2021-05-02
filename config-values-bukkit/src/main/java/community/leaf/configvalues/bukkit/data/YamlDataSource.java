@@ -20,20 +20,30 @@ public interface YamlDataSource
     
     void set(String key, @NullOr Object value);
     
-    <T> void set(YamlValue<T> key, @NullOr T value);
-    
-    default <T> Optional<T> get(YamlValue<T> value)
-    {
-        return value.get(data());
-    }
-    
-    default <T> T getOrDefault(DefaultYamlValue<T> value)
-    {
-        return value.getOrDefault(data());
-    }
+    <V> void set(YamlValue<V> key, @NullOr V value);
     
     default boolean has(YamlValue<?> value)
     {
         return value.isSet(data());
+    }
+    
+    default <V> Optional<V> get(YamlValue<V> value)
+    {
+        return value.get(data());
+    }
+    
+    default <V> V getOrDefault(DefaultYamlValue<V> value)
+    {
+        return value.getOrDefault(data());
+    }
+    
+    default <V> void setAsDefault(DefaultYamlValue<V> value)
+    {
+        set(value, value.getDefaultValue());
+    }
+    
+    default <V> void setAsDefaultIfUnset(DefaultYamlValue<V> value)
+    {
+        if (!has(value)) { setAsDefault(value); }
     }
 }
