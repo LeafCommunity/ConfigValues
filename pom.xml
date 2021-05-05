@@ -75,13 +75,13 @@
         <dependency>
             <groupId>com.github.rezzedup</groupId>
             <artifactId>constants</artifactId>
-            <version>cf5f9f7866</version>
+            <version>f5cf30443b</version>
         </dependency>
         <!-- Valuables (via jitpack.io, temporarily) -->
         <dependency>
             <groupId>com.github.rezzedup</groupId>
             <artifactId>valuables</artifactId>
-            <version>4518fa9c41</version>
+            <version>2fced82cab</version>
         </dependency>
     </dependencies>
 

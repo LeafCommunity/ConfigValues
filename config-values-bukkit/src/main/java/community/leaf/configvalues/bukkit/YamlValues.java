@@ -12,12 +12,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import pl.tlinkowski.annotation.basic.NullOr;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.BiFunction;
 
-class YamlValues
+final class YamlValues
 {
     private YamlValues() { throw new UnsupportedOperationException(); }
     
@@ -30,58 +28,12 @@ class YamlValues
     static final TypeCapture<DefaultYamlValue<?>> DEFAULT_TYPE = new TypeCapture<>() {};
     
     //
-    //  Adapters
+    //  Builders
     //
-    
-    static final YamlAdapter<String> STRING = adapter(ConfigurationSection::getString);
-    
-    static final YamlAdapter<Boolean> BOOLEAN = adapter(ConfigurationSection::getBoolean);
-    
-    static final YamlAdapter<Integer> INTEGER = adapter(ConfigurationSection::getInt);
-    
-    static final YamlAdapter<Long> LONG = adapter(ConfigurationSection::getLong);
-    
-    static final YamlAdapter<Double> DOUBLE = adapter(ConfigurationSection::getDouble);
-    
-    static final YamlAdapter<List<String>> STRING_LIST = adapter(ConfigurationSection::getStringList);
-    
-    static final YamlAdapter<List<Map<?, ?>>> MAP_LIST = adapter(ConfigurationSection::getMapList);
-    
-    //
-    //  Factories
-    //
-    
-    static <V> YamlAdapter<V> adapter(BiFunction<ConfigurationSection, String, V> getter)
-    {
-        return new AdapterImpl<>(getter);
-    }
     
     static <V> YamlValue.Builder<V> builder(String key, YamlAdapter<V> adapter)
     {
         return new BuilderImpl<>(key, adapter);
-    }
-    
-    //
-    //  Implementations
-    //
-    
-    static class AdapterImpl<V> implements YamlAdapter<V>
-    {
-        private final BiFunction<ConfigurationSection, String, V> getter;
-    
-        AdapterImpl(BiFunction<ConfigurationSection, String, V> getter) { this.getter = getter; }
-    
-        @Override
-        public @NullOr V get(ConfigurationSection section, String key)
-        {
-            return getter.apply(section, key);
-        }
-    
-        @Override
-        public void set(ConfigurationSection section, String key, @NullOr V value)
-        {
-            section.set(key, value);
-        }
     }
     
     static class BuilderImpl<V> implements YamlValue.Builder<V>
@@ -142,9 +94,9 @@ class YamlValues
         @Override
         public Optional<V> get(ConfigurationSection storage)
         {
-            return (isSet(storage)) ? Optional.ofNullable(adapter.get(storage, key)) : Optional.empty();
+            return Optional.ofNullable(adapter.get(storage, key));
         }
-    
+        
         @Override
         public void set(ConfigurationSection storage, @NullOr V value)
         {

@@ -13,6 +13,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public interface YamlValue<V> extends KeyValue<ConfigurationSection, String, V>
 {
@@ -28,37 +29,47 @@ public interface YamlValue<V> extends KeyValue<ConfigurationSection, String, V>
     
     static Builder<String> ofString(String key)
     {
-        return of(key, YamlValues.STRING);
+        return of(key, YamlAdapters.STRING);
     }
     
     static Builder<Boolean> ofBoolean(String key)
     {
-        return of(key, YamlValues.BOOLEAN);
+        return of(key, YamlAdapters.BOOLEAN);
     }
     
     static Builder<Integer> ofInteger(String key)
     {
-        return of(key, YamlValues.INTEGER);
+        return of(key, YamlAdapters.INTEGER);
     }
     
     static Builder<Long> ofLong(String key)
     {
-        return of(key, YamlValues.LONG);
+        return of(key, YamlAdapters.LONG);
+    }
+    
+    static Builder<Float> ofFloat(String key)
+    {
+        return of(key, YamlAdapters.FLOAT);
     }
     
     static Builder<Double> ofDouble(String key)
     {
-        return of(key, YamlValues.DOUBLE);
+        return of(key, YamlAdapters.DOUBLE);
     }
     
     static Builder<List<String>> ofStringList(String key)
     {
-        return of(key, YamlValues.STRING_LIST);
+        return of(key, YamlAdapters.STRING_LIST);
     }
     
     static Builder<List<Map<?, ?>>> ofMapList(String key)
     {
-        return of(key, YamlValues.MAP_LIST);
+        return of(key, YamlAdapters.MAP_LIST);
+    }
+    
+    static Builder<UUID> ofUuid(String key)
+    {
+        return of(key, YamlAdapters.UUID_TYPE);
     }
     
     List<String> migrations();

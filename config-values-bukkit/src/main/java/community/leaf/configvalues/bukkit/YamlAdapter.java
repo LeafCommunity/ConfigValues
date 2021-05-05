@@ -7,13 +7,22 @@
  */
 package community.leaf.configvalues.bukkit;
 
+import com.rezzedup.util.valuables.KeyValueAdapter;
 import org.bukkit.configuration.ConfigurationSection;
 import pl.tlinkowski.annotation.basic.NullOr;
 
-public interface YamlAdapter<V>
+public interface YamlAdapter<V> extends KeyValueAdapter<ConfigurationSection, Object, String, V>
 {
-    @SuppressWarnings("NullableProblems")
-    @NullOr V get(ConfigurationSection section, String key);
+    @Override
+    default void set(ConfigurationSection storage, String key, @NullOr V value)
+    {
+        storage.set(key, (value == null) ? null : serialize(value));
+    }
     
-    void set(ConfigurationSection section, String key, @NullOr V value);
+    @Override
+    default @NullOr V get(ConfigurationSection storage, String key)
+    {
+        @NullOr Object value = storage.get(key);
+        return (value == null) ? null : deserialize(value);
+    }
 }
