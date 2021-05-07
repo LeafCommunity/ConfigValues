@@ -1,0 +1,5 @@
+:
+:   Example Config v${revision}
+:
+:   An example configuration.
+:

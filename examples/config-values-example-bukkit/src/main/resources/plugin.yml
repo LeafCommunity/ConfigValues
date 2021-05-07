@@ -1,0 +1,4 @@
+main: community.leaf.examples.configvalues.bukkit.ExampleConfigPlugin
+name: ${project.name}
+version: ${revision}
+api-version: 1.13

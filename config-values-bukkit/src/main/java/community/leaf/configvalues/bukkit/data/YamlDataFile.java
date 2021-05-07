@@ -118,7 +118,20 @@ public class YamlDataFile implements UpdatableYamlDataSource
         save();
     }
     
-    protected void setupHeader(String resource)
+    public String header()
+    {
+        @NullOr String header = data.options().header();
+        return (header != null) ? header : "";
+    }
+    
+    public void header(String header)
+    {
+        data.options().header(header);
+        // Though this may technically "update" the config, if only the header
+        // is changed, that should not constitute rewriting the entire file.
+    }
+    
+    public void setupHeader(String resource)
     {
         try
         {
@@ -132,11 +145,7 @@ public class YamlDataFile implements UpdatableYamlDataSource
             try (FileSystem fs = FileSystems.newFileSystem(URI.create(parts[0]), Map.of()))
             {
                 String header = Files.readString(fs.getPath(parts[1]));
-                if (header.isEmpty()) { return; }
-                
-                data.options().header(header);
-                // Though this may technically "update" the config, if only the header
-                // changes, that should not constitute rewriting the entire file.
+                if (!header.isEmpty()) { header(header); }
             }
         }
         catch (IOException | URISyntaxException | RuntimeException e)
@@ -165,7 +174,7 @@ public class YamlDataFile implements UpdatableYamlDataSource
         }
     }
     
-    protected void setupDefaults(List<YamlValue<?>> defaults)
+    public void setupDefaults(List<YamlValue<?>> defaults)
     {
         for (YamlValue<?> value : defaults)
         {
@@ -178,7 +187,12 @@ public class YamlDataFile implements UpdatableYamlDataSource
     
     protected static void write(Path filePath, String contents, Consumer<? super IOException> exceptions)
     {
-        try { Files.writeString(filePath, contents); }
+        try
+        {
+            Path dir = filePath.getParent();
+            if (!Files.isDirectory(dir)) { Files.createDirectories(dir); }
+            Files.writeString(filePath, contents);
+        }
         catch (IOException e) { exceptions.accept(e); }
     }
     
@@ -197,7 +211,7 @@ public class YamlDataFile implements UpdatableYamlDataSource
             String name = (lastDot > 0) ? backupFileName.substring(0, lastDot) : "";
             String extension = (lastDot > 0) ? backupFileName.substring(lastDot) : "";
             
-            for (int i = 1 ;; i++)
+            for (int i = 1; i < 1000; i++)
             {
                 String attemptedName = name + ".backup_" + LocalDate.now() + "_" + i + extension;
                 Path attemptedBackupFilePath = backupDirectory.resolve(attemptedName);

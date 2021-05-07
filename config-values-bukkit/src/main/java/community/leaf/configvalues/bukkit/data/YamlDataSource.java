@@ -24,7 +24,7 @@ public interface YamlDataSource
     
     default boolean has(YamlValue<?> value)
     {
-        return value.isSet(data());
+        return value.get(data()).isPresent();
     }
     
     default <V> Optional<V> get(YamlValue<V> value)

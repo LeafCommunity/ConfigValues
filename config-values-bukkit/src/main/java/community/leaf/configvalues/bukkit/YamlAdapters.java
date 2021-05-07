@@ -8,6 +8,7 @@
 package community.leaf.configvalues.bukkit;
 
 import com.rezzedup.util.constants.types.Primitives;
+import com.rezzedup.util.valuables.Adapter;
 import com.rezzedup.util.valuables.Deserializer;
 import com.rezzedup.util.valuables.Serializer;
 import pl.tlinkowski.annotation.basic.NullOr;
@@ -55,14 +56,7 @@ final class YamlAdapters
     
     static <V> YamlAdapter<V> convert(Deserializer<Object, V> deserializer, Serializer<V, Object> serializer)
     {
-        return new YamlAdapter<>()
-        {
-            @Override
-            public @NullOr V deserialize(Object serialized) { return deserializer.deserialize(serialized); }
-            
-            @Override
-            public @NullOr Object serialize(V deserialized) { return serializer.serialize(deserialized); }
-        };
+        return YamlAdapter.delegates(Adapter.adapts(deserializer, serializer));
     }
     
     static <V> YamlAdapter<V> basic(Deserializer<Object, V> deserializer)

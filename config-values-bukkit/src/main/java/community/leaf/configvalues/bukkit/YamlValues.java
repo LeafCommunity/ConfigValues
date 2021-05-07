@@ -87,9 +87,6 @@ final class YamlValues
     
         @Override
         public List<String> migrations() { return migrations; }
-    
-        @Override
-        public boolean isSet(ConfigurationSection storage) { return storage.isSet(key); }
         
         @Override
         public Optional<V> get(ConfigurationSection storage)

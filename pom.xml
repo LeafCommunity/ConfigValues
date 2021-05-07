@@ -81,7 +81,7 @@
         <dependency>
             <groupId>com.github.rezzedup</groupId>
             <artifactId>valuables</artifactId>
-            <version>2fced82cab</version>
+            <version>37e22c3cde</version>
         </dependency>
     </dependencies>
 
