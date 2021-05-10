@@ -3,6 +3,7 @@ package community.leaf.examples.configvalues.bukkit;
 import com.rezzedup.util.constants.Aggregates;
 import com.rezzedup.util.constants.annotations.Aggregated;
 import community.leaf.configvalues.bukkit.DefaultYamlValue;
+import community.leaf.configvalues.bukkit.migrations.Migration;
 import community.leaf.configvalues.bukkit.YamlValue;
 import community.leaf.configvalues.bukkit.data.YamlDataFile;
 
@@ -13,7 +14,16 @@ public class Config extends YamlDataFile
     public static final YamlValue<String> VERSION = YamlValue.ofString("version").maybe();
     
     public static final DefaultYamlValue<String> JOIN_MESSAGE =
-        YamlValue.ofString("messages.join").defaults("Hey there %player%!\nWelcome back.");
+        YamlValue.ofString("messages.join")
+            .defaults("Hey there %player%!\nWelcome back.");
+    
+    public static final DefaultYamlValue<String> HELLO_MESSAGE =
+        YamlValue.ofString("messages.hello-world")
+            .migrates(
+                Migration.move("messages.hi"),
+                Migration.move("messages.hello")
+            )
+            .defaults("Hello world.");
     
     @Aggregated.Result
     private static final List<YamlValue<?>> VALUES =
@@ -38,17 +48,12 @@ public class Config extends YamlDataFile
         
         boolean isOutdated = !configVersion.equals(pluginVersion);
         
-        if (isOutdated)
-        {
-            set(VERSION, pluginVersion);
-        }
-        
+        if (isOutdated) { set(VERSION, pluginVersion); }
+    
         setupHeader("config.header.txt");
         setupDefaults(VALUES);
         
-        if (isUpdated())
-        {
-            backupThenSave(plugin.backups(), "v" + configVersion);
-        }
+        if (isOutdated) { migrateValues(VALUES, data()); }
+        if (isUpdated()) { backupThenSave(plugin.backups(), "v" + configVersion); }
     }
 }

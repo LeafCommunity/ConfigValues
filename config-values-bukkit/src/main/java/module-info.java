@@ -15,5 +15,6 @@ module community.leaf.configvalues.bukkit
     
     exports community.leaf.configvalues.bukkit;
     exports community.leaf.configvalues.bukkit.data;
+    exports community.leaf.configvalues.bukkit.migrations;
     exports community.leaf.configvalues.bukkit.util;
 }

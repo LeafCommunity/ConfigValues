@@ -9,6 +9,7 @@ package community.leaf.configvalues.bukkit;
 
 import com.rezzedup.util.constants.types.TypeCapture;
 import com.rezzedup.util.valuables.KeyValue;
+import community.leaf.configvalues.bukkit.migrations.Migration;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
@@ -72,11 +73,11 @@ public interface YamlValue<V> extends KeyValue<ConfigurationSection, String, V>
         return of(key, YamlAccessors.U_UID);
     }
     
-    List<String> migrations();
+    List<Migration> migrations();
     
     interface Builder<V>
     {
-        Builder<V> migrates(String ... keys);
+        Builder<V> migrates(Migration ... migrations);
         
         YamlValue<V> maybe();
         

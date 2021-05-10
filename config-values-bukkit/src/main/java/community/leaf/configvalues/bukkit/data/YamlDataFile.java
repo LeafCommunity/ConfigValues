@@ -9,6 +9,7 @@ package community.leaf.configvalues.bukkit.data;
 
 import community.leaf.configvalues.bukkit.DefaultYamlValue;
 import community.leaf.configvalues.bukkit.YamlValue;
+import community.leaf.configvalues.bukkit.migrations.Migration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -25,7 +26,6 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class YamlDataFile implements UpdatableYamlDataSource
@@ -164,16 +164,9 @@ public class YamlDataFile implements UpdatableYamlDataSource
         {
             if (value.migrations().isEmpty()) { continue; }
             
-            for (String path : value.migrations())
+            for (Migration policy : value.migrations())
             {
-                @NullOr Object existingValue = existing.get(path);
-                if (existingValue == null) { continue; }
-    
-                Optional<?> newValue = get(value);
-                if (newValue.isEmpty() || !existingValue.equals(newValue.get()))
-                {
-                    set(value.key(), existingValue);
-                }
+                policy.migrate(existing, this, value);
             }
         }
     }

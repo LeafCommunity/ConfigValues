@@ -8,9 +8,12 @@
 package community.leaf.configvalues.bukkit;
 
 import com.rezzedup.util.constants.types.TypeCapture;
+import community.leaf.configvalues.bukkit.migrations.Migration;
 import org.bukkit.configuration.ConfigurationSection;
 import pl.tlinkowski.annotation.basic.NullOr;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,7 +41,7 @@ final class YamlValues
     
     static class BuilderImpl<V> implements YamlValue.Builder<V>
     {
-        @NullOr List<String> migrations = null;
+        @NullOr List<Migration> migrations = null;
         
         final String key;
         final YamlAccessor<V> accessor;
@@ -48,14 +51,18 @@ final class YamlValues
             this.key = Objects.requireNonNull(key, "key");
             this.accessor = Objects.requireNonNull(accessor, "accessor");
         }
-        
+    
         @Override
-        public YamlValue.Builder<V> migrates(String... keys)
+        public YamlValue.Builder<V> migrates(Migration ... policies)
         {
-            this.migrations = List.of(keys);
+            Objects.requireNonNull(policies, "policies");
+            
+            if (migrations == null) { migrations = new ArrayList<>(); }
+            Collections.addAll(migrations, policies);
+            
             return this;
         }
-        
+    
         @Override
         public YamlValue<V> maybe()
         {
@@ -73,9 +80,9 @@ final class YamlValues
     {
         final String key;
         final YamlAccessor<V> accessor;
-        final List<String> migrations;
+        final List<Migration> migrations;
     
-        MaybeImpl(String key, YamlAccessor<V> accessor, @NullOr List<String> migrations)
+        MaybeImpl(String key, YamlAccessor<V> accessor, @NullOr List<Migration> migrations)
         {
             this.key = key;
             this.accessor = accessor;
@@ -86,7 +93,7 @@ final class YamlValues
         public String key() { return key; }
     
         @Override
-        public List<String> migrations() { return migrations; }
+        public List<Migration> migrations() { return migrations; }
         
         @Override
         public Optional<V> get(ConfigurationSection storage) { return accessor.get(storage, key); }
@@ -99,7 +106,7 @@ final class YamlValues
     {
         V def;
     
-        DefaultImpl(String key, YamlAccessor<V> accessor, @NullOr List<String> migrations, V def)
+        DefaultImpl(String key, YamlAccessor<V> accessor, @NullOr List<Migration> migrations, V def)
         {
             super(key, accessor, migrations);
             this.def = Objects.requireNonNull(def, "def");
