@@ -31,9 +31,9 @@ final class YamlValues
     //  Builders
     //
     
-    static <V> YamlValue.Builder<V> builder(String key, YamlAdapter<V> adapter)
+    static <V> YamlValue.Builder<V> builder(String key, YamlAccessor<V> accessor)
     {
-        return new BuilderImpl<>(key, adapter);
+        return new BuilderImpl<>(key, accessor);
     }
     
     static class BuilderImpl<V> implements YamlValue.Builder<V>
@@ -41,12 +41,12 @@ final class YamlValues
         @NullOr List<String> migrations = null;
         
         final String key;
-        final YamlAdapter<V> adapter;
+        final YamlAccessor<V> accessor;
         
-        BuilderImpl(String key, YamlAdapter<V> adapter)
+        BuilderImpl(String key, YamlAccessor<V> accessor)
         {
             this.key = Objects.requireNonNull(key, "key");
-            this.adapter = Objects.requireNonNull(adapter, "adapter");
+            this.accessor = Objects.requireNonNull(accessor, "accessor");
         }
         
         @Override
@@ -59,26 +59,26 @@ final class YamlValues
         @Override
         public YamlValue<V> maybe()
         {
-            return new MaybeImpl<>(key, adapter, migrations);
+            return new MaybeImpl<>(key, accessor, migrations);
         }
         
         @Override
         public DefaultYamlValue<V> defaults(V def)
         {
-            return new DefaultImpl<>(key, adapter, migrations, def);
+            return new DefaultImpl<>(key, accessor, migrations, def);
         }
     }
     
     static class MaybeImpl<V> implements YamlValue<V>
     {
         final String key;
-        final YamlAdapter<V> adapter;
+        final YamlAccessor<V> accessor;
         final List<String> migrations;
     
-        MaybeImpl(String key, YamlAdapter<V> adapter, @NullOr List<String> migrations)
+        MaybeImpl(String key, YamlAccessor<V> accessor, @NullOr List<String> migrations)
         {
             this.key = key;
-            this.adapter = adapter;
+            this.accessor = accessor;
             this.migrations = (migrations == null) ? List.of() : List.copyOf(migrations);
         }
     
@@ -89,25 +89,19 @@ final class YamlValues
         public List<String> migrations() { return migrations; }
         
         @Override
-        public Optional<V> get(ConfigurationSection storage)
-        {
-            return Optional.ofNullable(adapter.get(storage, key));
-        }
+        public Optional<V> get(ConfigurationSection storage) { return accessor.get(storage, key); }
         
         @Override
-        public void set(ConfigurationSection storage, @NullOr V value)
-        {
-            adapter.set(storage, key, value);
-        }
+        public void set(ConfigurationSection storage, @NullOr V value) { accessor.set(storage, key, value); }
     }
     
     static class DefaultImpl<V> extends MaybeImpl<V> implements DefaultYamlValue<V>
     {
         V def;
     
-        DefaultImpl(String key, YamlAdapter<V> adapter, @NullOr List<String> migrations, V def)
+        DefaultImpl(String key, YamlAccessor<V> accessor, @NullOr List<String> migrations, V def)
         {
-            super(key, adapter, migrations);
+            super(key, accessor, migrations);
             this.def = Objects.requireNonNull(def, "def");
         }
         

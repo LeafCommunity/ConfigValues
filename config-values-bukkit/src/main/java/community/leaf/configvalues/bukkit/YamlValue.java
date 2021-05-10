@@ -22,54 +22,54 @@ public interface YamlValue<V> extends KeyValue<ConfigurationSection, String, V>
         return YamlValues.TYPE;
     }
     
-    static <V> Builder<V> of(String key, YamlAdapter<V> adapter)
+    static <V> Builder<V> of(String key, YamlAccessor<V> accessor)
     {
-        return YamlValues.builder(key, adapter);
+        return YamlValues.builder(key, accessor);
     }
     
     static Builder<String> ofString(String key)
     {
-        return of(key, YamlAdapters.STRING);
+        return of(key, YamlAccessors.STRING);
     }
     
     static Builder<Boolean> ofBoolean(String key)
     {
-        return of(key, YamlAdapters.BOOLEAN);
+        return of(key, YamlAccessors.BOOLEAN);
     }
     
     static Builder<Integer> ofInteger(String key)
     {
-        return of(key, YamlAdapters.INTEGER);
+        return of(key, YamlAccessors.INTEGER);
     }
     
     static Builder<Long> ofLong(String key)
     {
-        return of(key, YamlAdapters.LONG);
+        return of(key, YamlAccessors.LONG);
     }
     
     static Builder<Float> ofFloat(String key)
     {
-        return of(key, YamlAdapters.FLOAT);
+        return of(key, YamlAccessors.FLOAT);
     }
     
     static Builder<Double> ofDouble(String key)
     {
-        return of(key, YamlAdapters.DOUBLE);
+        return of(key, YamlAccessors.DOUBLE);
     }
     
     static Builder<List<String>> ofStringList(String key)
     {
-        return of(key, YamlAdapters.STRING_LIST);
+        return of(key, YamlAccessors.STRING_LIST);
     }
     
     static Builder<List<Map<?, ?>>> ofMapList(String key)
     {
-        return of(key, YamlAdapters.MAP_LIST);
+        return of(key, YamlAccessors.MAP_LIST);
     }
     
     static Builder<UUID> ofUuid(String key)
     {
-        return of(key, YamlAdapters.UUID_TYPE);
+        return of(key, YamlAccessors.U_UID);
     }
     
     List<String> migrations();

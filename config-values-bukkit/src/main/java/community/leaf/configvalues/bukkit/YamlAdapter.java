@@ -8,67 +8,32 @@
 package community.leaf.configvalues.bukkit;
 
 import com.rezzedup.util.valuables.Adapter;
-import com.rezzedup.util.valuables.DelegatedKeyAdapter;
-import com.rezzedup.util.valuables.KeyGetter;
-import com.rezzedup.util.valuables.KeySetter;
-import org.bukkit.configuration.ConfigurationSection;
-import pl.tlinkowski.annotation.basic.NullOr;
+import com.rezzedup.util.valuables.Deserializer;
+import com.rezzedup.util.valuables.Serializer;
 
 import java.util.Objects;
+import java.util.Optional;
 
-public interface YamlAdapter<V> extends DelegatedKeyAdapter<ConfigurationSection, Object, String, V>
+public interface YamlAdapter<V> extends Adapter<Object, V>
 {
-    static <V> YamlAdapter<V> delegates(Adapter<Object, V> adapter)
+    static <V> YamlAdapter<V> adapts(Deserializer<Object, V> deserializer, Serializer<V, Object> serializer)
     {
-        Objects.requireNonNull(adapter, "adapter");
+        Objects.requireNonNull(deserializer, "deserializer");
+        Objects.requireNonNull(serializer, "serializer");
         
         return new YamlAdapter<>()
         {
             @Override
-            public @NullOr V get(ConfigurationSection storage, String key)
-            {
-                @NullOr Object value = storage.get(key);
-                return (value == null) ? null : deserialize(value);
-            }
+            public Optional<V> deserialize(Object serialized) { return deserializer.deserialize(serialized); }
             
             @Override
-            public void set(ConfigurationSection storage, String key, @NullOr V value)
-            {
-                storage.set(key, (value == null) ? null : serialize(value));
-            }
-            
-            @Override
-            public @NullOr V deserialize(Object serialized) { return adapter.deserialize(serialized); }
-            
-            @Override
-            public @NullOr Object serialize(V deserialized) { return adapter.serialize(deserialized); }
+            public Optional<Object> serialize(V deserialized) { return serializer.serialize(deserialized); }
         };
     }
     
-    static <V> YamlAdapter<V> directly(KeyGetter<ConfigurationSection, String, V> getter, KeySetter<ConfigurationSection, String, V> setter)
+    static <V> YamlAdapter<V> from(Adapter<Object, V> adapter)
     {
-        Objects.requireNonNull(getter, "getter");
-        Objects.requireNonNull(setter, "setter");
-        
-        return new YamlAdapter<>()
-        {
-            @Override
-            public @NullOr V get(ConfigurationSection storage, String key)
-            {
-                return getter.get(storage, key);
-            }
-            
-            @Override
-            public void set(ConfigurationSection storage, String key, @NullOr V value)
-            {
-                setter.set(storage, key, value);
-            }
-            
-            @Override
-            public @NullOr V deserialize(Object serialized) { return null; }
-            
-            @Override
-            public @NullOr Object serialize(V deserialized) { return null; }
-        };
+        Objects.requireNonNull(adapter, "adapter");
+        return adapts(adapter, adapter);
     }
 }
