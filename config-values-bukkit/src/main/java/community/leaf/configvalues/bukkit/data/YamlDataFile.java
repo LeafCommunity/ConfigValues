@@ -34,6 +34,7 @@ public class YamlDataFile implements UpdatableYamlDataSource
     private final YamlConfiguration data;
     private final Consumer<Exception> exceptions;
     
+    private int reloads = 0;
     private boolean isLoaded = false;
     private boolean isUpdated = false;
     private @NullOr Exception invalid = null;
@@ -69,8 +70,11 @@ public class YamlDataFile implements UpdatableYamlDataSource
     
     public @NullOr Exception getInvalidReason() { return invalid; }
     
+    public final int totalReloads() { return reloads; }
+    
     public final void reload()
     {
+        reloads++;
         invalid = null;
         boolean isAlreadyLoaded = isLoaded;
         
