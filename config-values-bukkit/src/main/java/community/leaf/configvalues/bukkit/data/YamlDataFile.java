@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class YamlDataFile implements UpdatableYamlDataSource
@@ -38,6 +39,7 @@ public class YamlDataFile implements UpdatableYamlDataSource
     private boolean isLoaded = false;
     private boolean isUpdated = false;
     private @NullOr Exception invalid = null;
+    private @NullOr Runnable reloadHandler = null;
     
     public YamlDataFile(Path directoryPath, String name)
     {
@@ -72,6 +74,12 @@ public class YamlDataFile implements UpdatableYamlDataSource
     
     public final int totalReloads() { return reloads; }
     
+    protected void reloadsWith(Runnable reloadHandler)
+    {
+        this.reloadHandler = Objects.requireNonNull(reloadHandler, "reloadHandler");
+        reloadHandler.run();
+    }
+    
     public final void reload()
     {
         reloads++;
@@ -92,11 +100,8 @@ public class YamlDataFile implements UpdatableYamlDataSource
             }
         }
         
-        if (isAlreadyLoaded) { handleReload(); }
+        if (isAlreadyLoaded && reloadHandler != null) { reloadHandler.run(); }
     }
-    
-    // Override me.
-    protected void handleReload() {}
     
     public String toYamlString() { return data.saveToString(); }
     
@@ -135,8 +140,10 @@ public class YamlDataFile implements UpdatableYamlDataSource
         // is changed, that should not constitute rewriting the entire file.
     }
     
-    public void setupHeader(String resource)
+    public void headerFromResource(String resource)
     {
+        Objects.requireNonNull(resource, "resource");
+        
         try
         {
             @NullOr URL resourceUrl = getClass().getClassLoader().getResource(resource);
@@ -158,26 +165,28 @@ public class YamlDataFile implements UpdatableYamlDataSource
         }
     }
     
-    public void migrateValues(List<YamlValue<?>> values, ConfigurationSection existing)
+    private void migrate(YamlValue<?> value, ConfigurationSection existing)
     {
-        for (YamlValue<?> value : values)
-        {
-            for (Migration migration : value.migrations())
-            {
-                migration.migrate(existing, this, value.key());
-            }
-        }
+        if (value.migrations().isEmpty()) { return; }
+        for (Migration migration : value.migrations()) { migration.migrate(existing, this, value.key()); }
     }
     
-    public void setupDefaults(List<YamlValue<?>> defaults)
+    public void migrateValues(List<YamlValue<?>> values, ConfigurationSection existing)
+    {
+        Objects.requireNonNull(values, "values");
+        Objects.requireNonNull(existing, "existing");
+        
+        for (YamlValue<?> value : values) { migrate(value, existing); }
+    }
+    
+    public void defaultValues(List<YamlValue<?>> defaults)
     {
         for (YamlValue<?> value : defaults)
         {
+            migrate(value, data);
             if (!(value instanceof DefaultYamlValue<?>)) { continue; }
             setAsDefaultIfUnset((DefaultYamlValue<?>) value);
         }
-        
-        migrateValues(defaults, data);
     }
     
     protected static void write(Path filePath, String contents, Consumer<? super IOException> exceptions)

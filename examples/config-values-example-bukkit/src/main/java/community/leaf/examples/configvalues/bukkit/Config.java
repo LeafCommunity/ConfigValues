@@ -29,31 +29,26 @@ public class Config extends YamlDataFile
     private static final List<YamlValue<?>> VALUES =
         Aggregates.list(Config.class, YamlValue.type(), Aggregates.matching().all());
     
-    private final ExampleConfigPlugin plugin;
-    
     public Config(ExampleConfigPlugin plugin)
     {
         super(plugin.directory(), "config.yml");
-        this.plugin = plugin;
-        handleReload();
-    }
-    
-    @Override
-    protected void handleReload()
-    {
-        if (isInvalid()) { return; }
         
-        String configVersion = get(VERSION).orElse("");
-        String pluginVersion = plugin.getDescription().getVersion();
+        reloadsWith(() ->
+        {
+            if (isInvalid()) { return; }
         
-        boolean isOutdated = !configVersion.equals(pluginVersion);
+            String configVersion = get(VERSION).orElse("");
+            String pluginVersion = plugin.getDescription().getVersion();
+            
+            boolean isOutdated = !configVersion.equals(pluginVersion);
+            
+            if (isOutdated) { set(VERSION, pluginVersion); }
         
-        if (isOutdated) { set(VERSION, pluginVersion); }
-    
-        setupHeader("config.header.txt");
-        setupDefaults(VALUES);
-        
-        if (isOutdated) { migrateValues(VALUES, data()); }
-        if (isUpdated()) { backupThenSave(plugin.backups(), "v" + configVersion); }
+            headerFromResource("config.header.txt");
+            defaultValues(VALUES);
+            
+            if (isOutdated) { migrateValues(VALUES, data()); }
+            if (isUpdated()) { backupThenSave(plugin.backups(), "v" + configVersion); }
+        });
     }
 }
