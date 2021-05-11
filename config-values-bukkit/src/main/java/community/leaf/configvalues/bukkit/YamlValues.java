@@ -76,6 +76,10 @@ final class YamlValues
         }
     }
     
+    //
+    //  Implementations
+    //
+    
     static class MaybeImpl<V> implements YamlValue<V>
     {
         final String key;

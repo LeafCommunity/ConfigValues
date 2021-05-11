@@ -33,12 +33,12 @@ final class Migrations
         existing.set(key, null);
     }
     
-    static final class MigrationImpl implements Migration
+    static final class Impl implements Migration
     {
         private final String key;
         private final MigrationStrategy strategy;
         
-        MigrationImpl(String key, MigrationStrategy strategy)
+        Impl(String key, MigrationStrategy strategy)
         {
             this.key = Objects.requireNonNull(key, "key");
             this.strategy = Objects.requireNonNull(strategy, "strategy");

@@ -42,10 +42,14 @@ final class YamlAdapters
     static final YamlAdapter<Double> DOUBLE = number(Number::doubleValue);
     
     static final YamlAdapter<List<String>> STRING_LIST =
-        list(val -> (val instanceof String || Primitives.isBoxed(val)) ? String.valueOf(val) : null);
+        list(serialized ->
+            (serialized instanceof String || Primitives.isBoxed(serialized))
+                ? String.valueOf(serialized)
+                : null
+        );
     
     static final YamlAdapter<List<Map<?, ?>>> MAP_LIST =
-        list(val ->(val instanceof Map<?, ?>) ? (Map<?, ?>) val : null);
+        list(serialized -> (serialized instanceof Map<?, ?>) ? (Map<?, ?>) serialized : null);
     
     static final YamlAdapter<UUID> U_UID =
         convert(
