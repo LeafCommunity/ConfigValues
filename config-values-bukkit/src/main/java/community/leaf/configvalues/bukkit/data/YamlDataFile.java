@@ -162,11 +162,9 @@ public class YamlDataFile implements UpdatableYamlDataSource
     {
         for (YamlValue<?> value : values)
         {
-            if (value.migrations().isEmpty()) { continue; }
-            
-            for (Migration policy : value.migrations())
+            for (Migration migration : value.migrations())
             {
-                policy.migrate(existing, this, value);
+                migration.migrate(existing, this, value.key());
             }
         }
     }

@@ -7,7 +7,6 @@
  */
 package community.leaf.configvalues.bukkit.migrations;
 
-import community.leaf.configvalues.bukkit.YamlValue;
 import community.leaf.configvalues.bukkit.data.YamlDataSource;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -35,9 +34,8 @@ public interface Migration
      * Migrates values at the specified key by
      * copying them from one config to another.
      *
-     * <p>This is the simplest migration strategy:
-     * it leaves the existing value untouched
-     * and intact.</p>
+     * <p>This is the simplest migration strategy: it
+     * leaves the existing value untouched and intact.</p>
      *
      * @param key   the old value's key
      *
@@ -53,9 +51,11 @@ public interface Migration
      * Migrates values at the specified key by
      * moving them from one config to another.
      *
-     * <p>If migration is successful, the old
-     * value is <b>removed</b> from the source
-     * configuration.</p>
+     * <p>Note: the value located at this migration's
+     * key is always <b>removed</b> from the source
+     * configuration regardless of whether migration
+     * is successful (thus ensuring the value is
+     * always "moved" to the destination).</p>
      *
      * @param key   the old value's key
      *
@@ -82,20 +82,21 @@ public interface Migration
     MigrationStrategy strategy();
     
     /**
-     * Migrates the specific value (retrieved with
-     * {@link #key()}) from an existing configuration
-     * into another by submitting it to the destination
-     * YAML data at the provided value's key.
+     * Migrates the specific value from an existing
+     * configuration (retrieved with {@link #key()})
+     * to the destination YAML data at the provided key.
      *
-     * <p>If the retrieved value doesn't exist, then
-     * nothing is migrated.</p>
+     * <p>If the retrieved "existing" value doesn't exist,
+     * then nothing is migrated.</p>
      *
-     * @param existing  existing configuration
-     * @param data      destination yaml data
-     * @param value     destination yaml value
+     * @param existing          existing configuration
+     * @param destination       destination yaml data
+     * @param destinationKey    destination value key
+     *
+     * @see MigrationStrategy#migrate(ConfigurationSection, String, YamlDataSource, String)
      */
-    default void migrate(ConfigurationSection existing, YamlDataSource data, YamlValue<?> value)
+    default void migrate(ConfigurationSection existing, YamlDataSource destination, String destinationKey)
     {
-        strategy().migrate(existing, key(), data, value);
+        strategy().migrate(existing, key(), destination, destinationKey);
     }
 }

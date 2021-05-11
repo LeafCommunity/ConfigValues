@@ -7,7 +7,6 @@
  */
 package community.leaf.configvalues.bukkit.migrations;
 
-import community.leaf.configvalues.bukkit.YamlValue;
 import community.leaf.configvalues.bukkit.data.YamlDataSource;
 import org.bukkit.configuration.ConfigurationSection;
 import pl.tlinkowski.annotation.basic.NullOr;
@@ -18,19 +17,20 @@ final class Migrations
 {
     private Migrations() { throw new UnsupportedOperationException(); }
     
-    static void copy(ConfigurationSection existing, String key, YamlDataSource data, YamlValue<?> value)
+    static void copy(ConfigurationSection existing, String existingKey, YamlDataSource destination, String destinationKey)
     {
-        @NullOr Object maybe = existing.get(key);
-        if (maybe != null) { data.set(value.key(), maybe); }
+        if (destination.data().isSet(destinationKey)) { return; }
+        @NullOr Object maybe = existing.get(existingKey);
+        if (maybe != null) { destination.set(destinationKey, maybe); }
     }
     
-    static void move(ConfigurationSection existing, String key, YamlDataSource data, YamlValue<?> value)
+    static void move(ConfigurationSection existing, String existingKey, YamlDataSource destination, String destinationKey)
     {
-        @NullOr Object maybe = existing.get(key);
-        if (maybe == null) { return; }
+        copy(existing, existingKey, destination, destinationKey);
         
-        data.set(value.key(), maybe);
-        existing.set(key, null);
+        // Only remove from source config if keys are distinct
+        // (protects the destination value if the config is migrating from itself)
+        if (!existingKey.equals(destinationKey)) { existing.set(existingKey, null); }
     }
     
     static final class Impl implements Migration

@@ -7,30 +7,39 @@
  */
 package community.leaf.configvalues.bukkit.migrations;
 
-import community.leaf.configvalues.bukkit.YamlValue;
 import community.leaf.configvalues.bukkit.data.YamlDataSource;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
- * Mechanism that migrates values from
- * one configuration to another.
+ * Migrates values from one configuration to another.
  */
 @FunctionalInterface
 public interface MigrationStrategy
 {
     /**
      * Migrates a value from an existing configuration
-     * into another by retrieving it from the specified
-     * key then submitting it to the destination YAML
-     * data at the provided value's key.
+     * to another by retrieving then submitting it to
+     * the destination YAML.
      *
-     * <p>If the retrieved value doesn't exist, then
-     * nothing is migrated.</p>
+     * <p>Note:</p>
      *
-     * @param existing  existing configuration
-     * @param key       key to retrieve the existing value from
-     * @param data      destination yaml data
-     * @param value     destination yaml value
+     * <ul>
+     *     <li>
+     *         If the destination YAML already has a value at
+     *         the destination key, then migration is skipped
+     *         (but some implementations may still modify the
+     *         existing value, such as removing it).
+     *     </li>
+     *     <li>
+     *         If the retrieved "existing" value doesn't exist,
+     *         then nothing is migrated.
+     *     </li>
+     * </ul>
+     *
+     * @param existing          existing configuration
+     * @param existingKey       key to retrieve the value from
+     * @param destination       destination yaml data
+     * @param destinationKey    destination value key
      */
-    void migrate(ConfigurationSection existing, String key, YamlDataSource data, YamlValue<?> value);
+    void migrate(ConfigurationSection existing, String existingKey, YamlDataSource destination, String destinationKey);
 }
