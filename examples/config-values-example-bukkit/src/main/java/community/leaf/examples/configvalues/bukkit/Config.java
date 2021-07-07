@@ -1,7 +1,7 @@
 package community.leaf.examples.configvalues.bukkit;
 
 import com.rezzedup.util.constants.Aggregates;
-import com.rezzedup.util.constants.annotations.Aggregated;
+import com.rezzedup.util.constants.annotations.AggregatedResult;
 import community.leaf.configvalues.bukkit.DefaultYamlValue;
 import community.leaf.configvalues.bukkit.migrations.Migration;
 import community.leaf.configvalues.bukkit.YamlValue;
@@ -25,9 +25,8 @@ public class Config extends YamlDataFile
             )
             .defaults("Hello world.");
     
-    @Aggregated.Result
-    private static final List<YamlValue<?>> VALUES =
-        Aggregates.list(Config.class, YamlValue.type(), Aggregates.matching().all());
+    @AggregatedResult
+    private static final List<YamlValue<?>> VALUES = Aggregates.list(Config.class, YamlValue.type());
     
     public Config(ExampleConfigPlugin plugin)
     {

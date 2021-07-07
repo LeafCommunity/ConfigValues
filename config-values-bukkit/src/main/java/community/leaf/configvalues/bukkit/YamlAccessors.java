@@ -15,21 +15,21 @@ final class YamlAccessors
 {
     private YamlAccessors() {}
     
-    static final YamlAccessor<String> STRING = YamlAccessor.adapts(YamlAdapters.STRING);
+    static final YamlAccessor<String> STRING = YamlAccessor.of(YamlAdapters.STRING);
     
-    static final YamlAccessor<Boolean> BOOLEAN = YamlAccessor.adapts(YamlAdapters.BOOLEAN);
+    static final YamlAccessor<Boolean> BOOLEAN = YamlAccessor.of(YamlAdapters.BOOLEAN);
     
-    static final YamlAccessor<Integer> INTEGER = YamlAccessor.adapts(YamlAdapters.INTEGER);
+    static final YamlAccessor<Integer> INTEGER = YamlAccessor.of(YamlAdapters.INTEGER);
     
-    static final YamlAccessor<Long> LONG = YamlAccessor.adapts(YamlAdapters.LONG);
+    static final YamlAccessor<Long> LONG = YamlAccessor.of(YamlAdapters.LONG);
     
-    static final YamlAccessor<Float> FLOAT = YamlAccessor.adapts(YamlAdapters.FLOAT);
+    static final YamlAccessor<Float> FLOAT = YamlAccessor.of(YamlAdapters.FLOAT);
     
-    static final YamlAccessor<Double> DOUBLE = YamlAccessor.adapts(YamlAdapters.DOUBLE);
+    static final YamlAccessor<Double> DOUBLE = YamlAccessor.of(YamlAdapters.DOUBLE);
     
-    static final YamlAccessor<List<String>> STRING_LIST = YamlAccessor.adapts(YamlAdapters.STRING_LIST);
+    static final YamlAccessor<List<String>> STRING_LIST = YamlAccessor.of(YamlAdapters.STRING_LIST);
     
-    static final YamlAccessor<List<Map<?, ?>>> MAP_LIST = YamlAccessor.adapts(YamlAdapters.MAP_LIST);
+    static final YamlAccessor<List<Map<?, ?>>> MAP_LIST = YamlAccessor.of(YamlAdapters.MAP_LIST);
     
-    static final YamlAccessor<UUID> U_UID = YamlAccessor.adapts(YamlAdapters.U_UID);
+    static final YamlAccessor<UUID> U_UID = YamlAccessor.of(YamlAdapters.U_UID);
 }

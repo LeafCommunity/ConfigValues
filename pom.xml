@@ -53,7 +53,7 @@
         <license.header.url>https://github.com/LeafCommunity/ConfigValues</license.header.url>
 
         <!-- Dependency versions -->
-        <versions.minecraft.spigot>1.16.5-R0.1-SNAPSHOT</versions.minecraft.spigot>
+        <versions.minecraft.spigot>1.17.1-R0.1-SNAPSHOT</versions.minecraft.spigot>
     </properties>
 
     <repositories>
@@ -75,17 +75,17 @@
             <version>0.2.0</version>
             <!-- Note: scope must be visible to dependent projects otherwise nullness annotations will not work as intended -->
         </dependency>
-        <!-- Constants (via jitpack.io, temporarily) -->
+        <!-- Constants (via maven-central) -->
         <dependency>
-            <groupId>com.github.rezzedup</groupId>
+            <groupId>com.rezzedup.util</groupId>
             <artifactId>constants</artifactId>
-            <version>f5cf30443b</version>
+            <version>0.1.0</version>
         </dependency>
-        <!-- Valuables (via sonatype ossrh snapshots, temporarily) -->
+        <!-- Valuables (via maven-central) -->
         <dependency>
             <groupId>com.rezzedup.util</groupId>
             <artifactId>valuables</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.1.0</version>
         </dependency>
     </dependencies>
 

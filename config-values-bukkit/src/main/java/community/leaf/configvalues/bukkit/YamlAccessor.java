@@ -7,6 +7,7 @@
  */
 package community.leaf.configvalues.bukkit;
 
+import com.rezzedup.util.valuables.Adapter;
 import com.rezzedup.util.valuables.KeyGetter;
 import com.rezzedup.util.valuables.KeySetter;
 import org.bukkit.configuration.ConfigurationSection;
@@ -17,7 +18,7 @@ import java.util.Optional;
 
 public interface YamlAccessor<V> extends KeyGetter<ConfigurationSection, String, V>, KeySetter<ConfigurationSection, String, V>
 {
-    static <V> YamlAccessor<V> adapts(YamlAdapter<V> adapter)
+    static <V> YamlAccessor<V> of(Adapter<Object, V> adapter)
     {
         Objects.requireNonNull(adapter, "adapter");
         
@@ -37,7 +38,7 @@ public interface YamlAccessor<V> extends KeyGetter<ConfigurationSection, String,
         };
     }
     
-    static <V> YamlAccessor<V> directly(KeyGetter<ConfigurationSection, String, V> getter, KeySetter<ConfigurationSection, String, V> setter)
+    static <V> YamlAccessor<V> of(KeyGetter<ConfigurationSection, String, V> getter, KeySetter<ConfigurationSection, String, V> setter)
     {
         Objects.requireNonNull(getter, "getter");
         Objects.requireNonNull(setter, "setter");

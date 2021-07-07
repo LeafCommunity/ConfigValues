@@ -8,6 +8,7 @@
 package community.leaf.configvalues.bukkit;
 
 import com.rezzedup.util.constants.types.Primitives;
+import com.rezzedup.util.valuables.Adapter;
 import com.rezzedup.util.valuables.Deserializer;
 import com.rezzedup.util.valuables.Serializer;
 import pl.tlinkowski.annotation.basic.NullOr;
@@ -23,35 +24,35 @@ final class YamlAdapters
 {
     private YamlAdapters() { throw new UnsupportedOperationException(); }
     
-    static final YamlAdapter<String> STRING =
+    static final Adapter<Object, String> STRING =
         simple(serialized -> Optional.of(String.valueOf(serialized)));
     
-    static final YamlAdapter<Boolean> BOOLEAN =
+    static final Adapter<Object, Boolean> BOOLEAN =
         simple(serialized ->
             (serialized instanceof Boolean)
                 ? Optional.of((Boolean) serialized)
                 : Optional.empty()
         );
     
-    static final YamlAdapter<Integer> INTEGER = number(Number::intValue);
+    static final Adapter<Object, Integer> INTEGER = number(Number::intValue);
     
-    static final YamlAdapter<Long> LONG = number(Number::longValue);
+    static final Adapter<Object, Long> LONG = number(Number::longValue);
     
-    static final YamlAdapter<Float> FLOAT = number(Number::floatValue);
+    static final Adapter<Object, Float> FLOAT = number(Number::floatValue);
     
-    static final YamlAdapter<Double> DOUBLE = number(Number::doubleValue);
+    static final Adapter<Object, Double> DOUBLE = number(Number::doubleValue);
     
-    static final YamlAdapter<List<String>> STRING_LIST =
+    static final Adapter<Object, List<String>> STRING_LIST =
         list(serialized ->
             (serialized instanceof String || Primitives.isBoxed(serialized))
                 ? String.valueOf(serialized)
                 : null
         );
     
-    static final YamlAdapter<List<Map<?, ?>>> MAP_LIST =
+    static final Adapter<Object, List<Map<?, ?>>> MAP_LIST =
         list(serialized -> (serialized instanceof Map<?, ?>) ? (Map<?, ?>) serialized : null);
     
-    static final YamlAdapter<UUID> U_UID =
+    static final Adapter<Object, UUID> U_UID =
         convert(
             serialized -> {
                 try { return Optional.of(UUID.fromString(String.valueOf(serialized))); }
@@ -64,17 +65,17 @@ final class YamlAdapters
     //  Factories
     //
     
-    static <V> YamlAdapter<V> convert(Deserializer<Object, V> deserializer, Serializer<V, Object> serializer)
+    static <V> Adapter<Object, V> convert(Deserializer<Object, V> deserializer, Serializer<V, Object> serializer)
     {
-        return YamlAdapter.adapts(deserializer, serializer);
+        return Adapter.of(deserializer, serializer);
     }
     
-    static <V> YamlAdapter<V> simple(Deserializer<Object, V> deserializer)
+    static <V> Adapter<Object, V> simple(Deserializer<Object, V> deserializer)
     {
         return convert(deserializer, Optional::of);
     }
     
-    static <V extends Number> YamlAdapter<V> number(Function<Number, V> conversion)
+    static <V extends Number> Adapter<Object, V> number(Function<Number, V> conversion)
     {
         return simple(val ->
             (val instanceof Number)
@@ -83,7 +84,7 @@ final class YamlAdapters
         );
     }
     
-    static <V> YamlAdapter<List<V>> list(Function<Object, @NullOr V> conversion)
+    static <V> Adapter<Object, List<V>> list(Function<Object, @NullOr V> conversion)
     {
         return simple(serialized ->
         {
