@@ -3,7 +3,7 @@
 [![](https://jitpack.io/v/community.leaf/configvalues.svg)](https://jitpack.io/#community.leaf/configvalues "Get maven artifacts on JitPack")
 [![](https://img.shields.io/badge/License-MPL--2.0-blue)](./LICENSE "Project License: MPL-2.0")
 [![](https://img.shields.io/badge/Java-11-orange)](#java-version "Java Version: 11")
-[![](https://img.shields.io/badge/View-Javadocs-%234D7A97)](https://javadoc.jitpack.io/community/leaf/configvalues/latest/javadoc/ "View Javadocs")
+[![](https://img.shields.io/badge/View-Javadocs-%234D7A97)](https://javadoc.jitpack.io/community/leaf/configvalues/config-values-parent/latest/javadoc/ "View Javadocs")
 
 ## Maven
 
