@@ -55,11 +55,11 @@ public class YamlAdapters
         );
     }
     
-    public static <V> Adapter<Object, V> ofParsed(Function<String, V> parser)
+    public static <V> Adapter<Object, V> ofParsed(Function<String, @NullOr V> parser)
     {
         return Adapter.of(
             serialized -> {
-                try { return Optional.of(parser.apply(String.valueOf(serialized))); }
+                try { return Optional.ofNullable(parser.apply(String.valueOf(serialized))); }
                 catch (RuntimeException ignored) { return Optional.empty(); }
             },
             deserialized -> Optional.of(String.valueOf(deserialized))
