@@ -56,6 +56,15 @@
         <versions.minecraft.spigot>1.17.1-R0.1-SNAPSHOT</versions.minecraft.spigot>
     </properties>
 
+    <!--
+    <repositories>
+        <repository>
+            <id>ossrh-snapshots</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+    -->
+
     <dependencies>
         <!-- Nullness Annotations: @NullOr (via maven-central) -->
         <dependency>
@@ -74,7 +83,7 @@
         <dependency>
             <groupId>com.rezzedup.util</groupId>
             <artifactId>valuables</artifactId>
-            <version>0.1.0</version>
+            <version>0.2.0</version>
         </dependency>
     </dependencies>
 

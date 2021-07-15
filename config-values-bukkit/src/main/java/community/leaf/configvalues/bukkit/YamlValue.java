@@ -10,8 +10,11 @@ package community.leaf.configvalues.bukkit;
 import com.rezzedup.util.constants.types.TypeCapture;
 import com.rezzedup.util.valuables.KeyValue;
 import community.leaf.configvalues.bukkit.migrations.Migration;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -71,6 +74,21 @@ public interface YamlValue<V> extends KeyValue<ConfigurationSection, String, V>
     static Builder<UUID> ofUuid(String key)
     {
         return of(key, YamlAccessors.U_UID);
+    }
+    
+    static Builder<Sound> ofSound(String key)
+    {
+        return of(key, YamlAccessors.SOUND);
+    }
+    
+    static Builder<Material> ofMaterial(String key)
+    {
+        return of(key, YamlAccessors.MATERIAL);
+    }
+    
+    static Builder<Instant> ofInstant(String key)
+    {
+        return of(key, YamlAccessors.INSTANT);
     }
     
     List<Migration> migrations();

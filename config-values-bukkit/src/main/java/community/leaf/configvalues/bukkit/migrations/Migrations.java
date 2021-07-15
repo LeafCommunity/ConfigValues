@@ -19,7 +19,6 @@ final class Migrations
     
     static void copy(ConfigurationSection existing, String existingKey, YamlDataSource destination, String destinationKey)
     {
-        if (destination.data().isSet(destinationKey)) { return; }
         @NullOr Object maybe = existing.get(existingKey);
         if (maybe != null) { destination.set(destinationKey, maybe); }
     }
