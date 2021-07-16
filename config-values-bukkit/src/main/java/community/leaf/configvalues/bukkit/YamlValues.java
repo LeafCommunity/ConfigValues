@@ -30,6 +30,8 @@ final class YamlValues
     
     static final TypeCapture<DefaultYamlValue<?>> DEFAULT_TYPE = new TypeCapture<>() {};
     
+    static final TypeCapture<ExampleYamlValue<?>> EXAMPLE_TYPE = new TypeCapture<>() {};
+    
     //
     //  Builders
     //
@@ -73,6 +75,12 @@ final class YamlValues
         public DefaultYamlValue<V> defaults(V def)
         {
             return new DefaultImpl<>(key, accessor, migrations, def);
+        }
+    
+        @Override
+        public ExampleYamlValue<V> example(V example)
+        {
+            return new ExampleImpl<>(key, accessor, migrations, example);
         }
     }
     
@@ -119,5 +127,13 @@ final class YamlValues
         @SuppressWarnings("NullableProblems")
         @Override
         public V getDefaultValue() { return def; }
+    }
+    
+    static class ExampleImpl<V> extends DefaultImpl<V> implements ExampleYamlValue<V>
+    {
+        ExampleImpl(String key, YamlAccessor<V> accessor, @NullOr List<Migration> migrations, V example)
+        {
+            super(key, accessor, migrations, example);
+        }
     }
 }

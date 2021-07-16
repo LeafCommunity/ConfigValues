@@ -3,6 +3,7 @@ package community.leaf.examples.configvalues.bukkit;
 import com.rezzedup.util.constants.Aggregates;
 import com.rezzedup.util.constants.annotations.AggregatedResult;
 import community.leaf.configvalues.bukkit.DefaultYamlValue;
+import community.leaf.configvalues.bukkit.ExampleYamlValue;
 import community.leaf.configvalues.bukkit.migrations.Migration;
 import community.leaf.configvalues.bukkit.YamlValue;
 import community.leaf.configvalues.bukkit.data.YamlDataFile;
@@ -24,6 +25,9 @@ public class Config extends YamlDataFile
                 Migration.move("messages.hello")
             )
             .defaults("Hello world.");
+    
+    public static final ExampleYamlValue<String> EXAMPLE_MESSAGE =
+        YamlValue.ofString("messages.example").example("I only get set once!");
     
     @AggregatedResult
     private static final List<YamlValue<?>> VALUES = Aggregates.list(Config.class, YamlValue.type());

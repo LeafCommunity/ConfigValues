@@ -8,6 +8,7 @@
 package community.leaf.configvalues.bukkit.data;
 
 import community.leaf.configvalues.bukkit.DefaultYamlValue;
+import community.leaf.configvalues.bukkit.ExampleYamlValue;
 import community.leaf.configvalues.bukkit.YamlValue;
 import community.leaf.configvalues.bukkit.migrations.Migration;
 import org.bukkit.configuration.ConfigurationSection;
@@ -38,6 +39,7 @@ public class YamlDataFile implements UpdatableYamlDataSource
     private int reloads = 0;
     private boolean isLoaded = false;
     private boolean isUpdated = false;
+    private boolean isNewlyCreated = false;
     private @NullOr Exception invalid = null;
     private @NullOr Runnable reloadHandler = null;
     
@@ -67,6 +69,8 @@ public class YamlDataFile implements UpdatableYamlDataSource
     
     @Override
     public void updated(boolean state) { this.isUpdated = state; }
+    
+    public boolean isNewlyCreated() { return isNewlyCreated; }
     
     public boolean isInvalid() { return invalid != null; }
     
@@ -107,7 +111,11 @@ public class YamlDataFile implements UpdatableYamlDataSource
     
     public void save()
     {
+        boolean pre = Files.isRegularFile(getFilePath());
         write(getFilePath(), toYamlString(), exceptions);
+        boolean post = Files.isRegularFile(getFilePath());
+        
+        this.isNewlyCreated = !pre && post;
     }
     
     public void backupThenSave(Path backupsDirectoryPath, String additionalNameInfo)
@@ -125,6 +133,11 @@ public class YamlDataFile implements UpdatableYamlDataSource
         
         backup(getFilePath(), backupsDirectoryPath.resolve(name + extension), exceptions);
         save();
+    }
+    
+    public void backupThenSave(Path backupsDirectoryPath)
+    {
+        backupThenSave(backupsDirectoryPath, "");
     }
     
     public String header()
@@ -184,8 +197,15 @@ public class YamlDataFile implements UpdatableYamlDataSource
         for (YamlValue<?> value : defaults)
         {
             migrate(value, data);
-            if (!(value instanceof DefaultYamlValue<?>)) { continue; }
-            setAsDefaultIfUnset((DefaultYamlValue<?>) value);
+            
+            if (value instanceof DefaultYamlValue<?>)
+            {
+                // Successfully loaded values from disk already, don't set example value.
+                // Examples should only be set when the file is created for the first time.
+                if (value instanceof ExampleYamlValue<?> && isLoaded) { continue; }
+                
+                setAsDefaultIfUnset((DefaultYamlValue<?>) value);
+            }
         }
     }
     

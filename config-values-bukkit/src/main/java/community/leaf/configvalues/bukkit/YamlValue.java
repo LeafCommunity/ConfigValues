@@ -100,5 +100,7 @@ public interface YamlValue<V> extends KeyValue<ConfigurationSection, String, V>
         YamlValue<V> maybe();
         
         DefaultYamlValue<V> defaults(V value);
+        
+        ExampleYamlValue<V> example(V value);
     }
 }
