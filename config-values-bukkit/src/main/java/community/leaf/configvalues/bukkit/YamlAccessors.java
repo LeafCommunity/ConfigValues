@@ -7,7 +7,7 @@
  */
 package community.leaf.configvalues.bukkit;
 
-import com.rezzedup.util.valuables.Adapts;
+import com.rezzedup.util.valuables.Adapter;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 
@@ -20,23 +20,23 @@ final class YamlAccessors
 {
     private YamlAccessors() {}
     
-    static final YamlAccessor<String> STRING = YamlAccessor.of(Adapts.object().intoString());
+    static final YamlAccessor<String> STRING = YamlAccessor.of(Adapter.ofObject().intoString());
     
-    static final YamlAccessor<Boolean> BOOLEAN = YamlAccessor.of(Adapts.object().intoBoolean());
+    static final YamlAccessor<Boolean> BOOLEAN = YamlAccessor.of(Adapter.ofObject().intoBoolean());
     
-    static final YamlAccessor<Integer> INTEGER = YamlAccessor.of(Adapts.object().intoInteger());
+    static final YamlAccessor<Integer> INTEGER = YamlAccessor.of(Adapter.ofObject().intoInteger());
     
-    static final YamlAccessor<Long> LONG = YamlAccessor.of(Adapts.object().intoLong());
+    static final YamlAccessor<Long> LONG = YamlAccessor.of(Adapter.ofObject().intoLong());
     
-    static final YamlAccessor<Float> FLOAT = YamlAccessor.of(Adapts.object().intoFloat());
+    static final YamlAccessor<Float> FLOAT = YamlAccessor.of(Adapter.ofObject().intoFloat());
     
-    static final YamlAccessor<Double> DOUBLE = YamlAccessor.of(Adapts.object().intoDouble());
+    static final YamlAccessor<Double> DOUBLE = YamlAccessor.of(Adapter.ofObject().intoDouble());
     
     static final YamlAccessor<List<String>> STRING_LIST = YamlAccessor.of(YamlAdapters.STRING_LIST);
     
     static final YamlAccessor<List<Map<?, ?>>> MAP_LIST = YamlAccessor.of(YamlAdapters.MAP_LIST);
     
-    static final YamlAccessor<UUID> U_UID = YamlAccessor.of(Adapts.object().intoUuid());
+    static final YamlAccessor<UUID> U_UID = YamlAccessor.of(Adapter.ofObject().intoUuid());
     
     static final YamlAccessor<Sound> SOUND = YamlAccessor.of(YamlAdapters.SOUND);
     

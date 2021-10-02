@@ -9,7 +9,6 @@ package community.leaf.configvalues.bukkit;
 
 import com.rezzedup.util.constants.types.Primitives;
 import com.rezzedup.util.valuables.Adapter;
-import com.rezzedup.util.valuables.Adapts;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import pl.tlinkowski.annotation.basic.NullOr;
@@ -50,7 +49,7 @@ public class YamlAdapters
     public static <E extends Enum<E>> Adapter<Object, E> ofEnum(Class<E> type)
     {
         return Adapter.of(
-            serialized -> Adapts.string().intoEnum(type).deserialize(String.valueOf(serialized)),
+            serialized -> Adapter.ofString().intoEnum(type).deserialize(String.valueOf(serialized)),
             deserialized -> Optional.of(String.valueOf(deserialized))
         );
     }
