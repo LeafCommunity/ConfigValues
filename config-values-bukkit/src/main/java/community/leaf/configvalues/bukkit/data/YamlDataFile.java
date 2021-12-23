@@ -45,16 +45,21 @@ public class YamlDataFile implements UpdatableYamlDataSource
     
     public YamlDataFile(Path directoryPath, String name)
     {
-        this(directoryPath, name, Throwable::printStackTrace);
+        this(directoryPath, name, Load.NOW);
     }
     
-    public YamlDataFile(Path directoryPath, String name, Consumer<Exception> exceptions)
+    public YamlDataFile(Path directoryPath, String name, Load load)
+    {
+        this(directoryPath, name, load, Throwable::printStackTrace);
+    }
+    
+    public YamlDataFile(Path directoryPath, String name, Load load, Consumer<Exception> exceptions)
     {
         this.filePath = directoryPath.resolve(name);
         this.data = new YamlConfiguration();
         this.exceptions = exceptions;
         
-        reload();
+        if (load == Load.NOW) { reload(); }
     }
     
     public Path getFilePath() { return filePath; }
@@ -81,7 +86,8 @@ public class YamlDataFile implements UpdatableYamlDataSource
     protected void reloadsWith(Runnable reloadHandler)
     {
         this.reloadHandler = Objects.requireNonNull(reloadHandler, "reloadHandler");
-        reloadHandler.run();
+        if (isLoaded) { reloadHandler.run(); }
+        else { reload(); } // reload handler is called in reload
     }
     
     public final void reload()
