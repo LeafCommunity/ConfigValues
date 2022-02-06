@@ -96,7 +96,6 @@ public class YamlDataFile implements UpdatableYamlDataSource
     {
         reloads++;
         invalidReason = null;
-        boolean isAlreadyLoaded = isLoaded;
         
         if (Files.isRegularFile(filePath))
         {
@@ -112,7 +111,7 @@ public class YamlDataFile implements UpdatableYamlDataSource
             }
         }
         
-        if (isAlreadyLoaded && reloadHandler != null) { reloadHandler.run(); }
+        if (reloadHandler != null) { reloadHandler.run(); }
     }
     
     public String toYamlString() { return data.saveToString(); }
