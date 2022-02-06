@@ -30,7 +30,8 @@ public class Config extends YamlDataFile
         YamlValue.ofString("messages.example").example("I only get set once!");
     
     @AggregatedResult
-    private static final List<YamlValue<?>> VALUES = Aggregates.list(Config.class, YamlValue.type());
+    private static final List<YamlValue<?>> VALUES =
+        Aggregates.fromThisClass().constantsOfType(YamlValue.type()).toList();
     
     public Config(ExampleConfigPlugin plugin)
     {

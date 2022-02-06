@@ -16,7 +16,7 @@
   <licenses>
     <license>
       <name>Mozilla Public License Version 2.0</name>
-      <url>http://mozilla.org/MPL/2.0</url>
+      <url>https://mozilla.org/MPL/2.0</url>
     </license>
   </licenses>
   
@@ -30,7 +30,7 @@
   <scm>
     <connection>scm:git:git://github.com/LeafCommunity/ConfigValues.git</connection>
     <developerConnection>scm:git:ssh://github.com:LeafCommunity/ConfigValues.git</developerConnection>
-    <url>http://github.com/LeafCommunity/ConfigValues</url>
+    <url>https://github.com/LeafCommunity/ConfigValues</url>
   </scm>
   
   <issueManagement>
@@ -79,7 +79,7 @@
     <dependency>
       <groupId>com.rezzedup.util</groupId>
       <artifactId>constants</artifactId>
-      <version>0.1.0</version>
+      <version>0.2.1</version>
     </dependency>
     <!-- Valuables (via maven-central) -->
     <dependency>
