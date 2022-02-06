@@ -40,7 +40,7 @@ public class YamlDataFile implements UpdatableYamlDataSource
     private boolean isLoaded = false;
     private boolean isUpdated = false;
     private boolean isNewlyCreated = false;
-    private @NullOr Exception invalid = null;
+    private @NullOr Exception invalidReason = null;
     private @NullOr Runnable reloadHandler = null;
     
     public YamlDataFile(Path directoryPath, String name)
@@ -77,23 +77,25 @@ public class YamlDataFile implements UpdatableYamlDataSource
     
     public boolean isNewlyCreated() { return isNewlyCreated; }
     
-    public boolean isInvalid() { return invalid != null; }
+    public boolean isInvalid() { return invalidReason != null; }
     
-    public @NullOr Exception getInvalidReason() { return invalid; }
+    public @NullOr Exception getInvalidReason() { return invalidReason; }
     
     public final int totalReloads() { return reloads; }
     
     protected void reloadsWith(Runnable reloadHandler)
     {
-        this.reloadHandler = Objects.requireNonNull(reloadHandler, "reloadHandler");
+        Objects.requireNonNull(reloadHandler, "reloadHandler");
+        this.reloadHandler = reloadHandler;
+        
+        // Only run if already loaded
         if (isLoaded) { reloadHandler.run(); }
-        else { reload(); } // reload handler is called in reload
     }
     
     public final void reload()
     {
         reloads++;
-        invalid = null;
+        invalidReason = null;
         boolean isAlreadyLoaded = isLoaded;
         
         if (Files.isRegularFile(filePath))
@@ -105,7 +107,7 @@ public class YamlDataFile implements UpdatableYamlDataSource
             }
             catch (InvalidConfigurationException | IOException | RuntimeException e)
             {
-                invalid = e;
+                invalidReason = e;
                 exceptions.accept(e);
             }
         }
