@@ -38,7 +38,6 @@ public class YamlDataFile implements UpdatableYamlDataSource
     private final Consumer<Exception> exceptions;
     
     private int reloads = 0;
-    private boolean isLoaded = false;
     private boolean isUpdated = false;
     private boolean isNewlyCreated = false;
     private @NullOr Exception invalidReason = null;
@@ -68,8 +67,6 @@ public class YamlDataFile implements UpdatableYamlDataSource
     @Override
     public YamlConfiguration data() { return data; }
     
-    public boolean isLoaded() { return isLoaded; }
-    
     @Override
     public boolean isUpdated() { return isUpdated; }
     
@@ -89,8 +86,8 @@ public class YamlDataFile implements UpdatableYamlDataSource
         Objects.requireNonNull(reloadHandler, "reloadHandler");
         this.reloadHandler = reloadHandler;
         
-        // Only run if already loaded
-        if (isLoaded) { reloadHandler.run(); }
+        // Run right away if config data has already loaded at least once
+        if (reloads > 0) { reloadHandler.run(); }
     }
     
     public final void reload()
@@ -103,18 +100,12 @@ public class YamlDataFile implements UpdatableYamlDataSource
             try
             {
                 data.loadFromString(Files.readString(filePath));
-                isLoaded = true;
             }
             catch (InvalidConfigurationException | IOException | RuntimeException e)
             {
                 invalidReason = e;
                 exceptions.accept(e);
             }
-        }
-        else
-        {
-            // Nothing to load, so... it's loaded!
-            isLoaded = true;
         }
         
         if (reloadHandler != null) { reloadHandler.run(); }
@@ -209,6 +200,8 @@ public class YamlDataFile implements UpdatableYamlDataSource
     
     public void defaultValues(List<YamlValue<?>> defaults)
     {
+        boolean fileExists = Files.isRegularFile(filePath);
+        
         for (YamlValue<?> value : defaults)
         {
             migrate(value, data);
@@ -217,7 +210,7 @@ public class YamlDataFile implements UpdatableYamlDataSource
             {
                 // Successfully loaded values from disk already, don't set example value.
                 // Examples should only be set when the file is created for the first time.
-                if (value instanceof ExampleYamlValue<?> && isLoaded) { continue; }
+                if (value instanceof ExampleYamlValue<?> && fileExists) { continue; }
                 
                 setAsDefaultIfUnset((DefaultYamlValue<?>) value);
             }
