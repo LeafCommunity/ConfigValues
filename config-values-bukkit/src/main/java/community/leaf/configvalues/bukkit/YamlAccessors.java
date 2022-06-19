@@ -8,8 +8,10 @@
 package community.leaf.configvalues.bukkit;
 
 import com.rezzedup.util.valuables.Adapter;
+import community.leaf.configvalues.bukkit.util.Sections;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.time.Instant;
 import java.util.List;
@@ -19,6 +21,15 @@ import java.util.UUID;
 final class YamlAccessors
 {
     private YamlAccessors() {}
+    
+    static final YamlAccessor<ConfigurationSection> SECTION = YamlAccessor.of(
+        Sections::get,
+        (storage, key, updated) ->
+        {
+            if (updated == null) { storage.set(key, null); }
+            else { storage.set(key, updated.getValues(true)); }
+        }
+    );
     
     static final YamlAccessor<String> STRING = YamlAccessor.of(Adapter.ofObject().intoString());
     

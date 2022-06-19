@@ -144,7 +144,7 @@ public class YamlDataFile implements UpdatableYamlDataSource
         backupThenSave(backupsDirectoryPath, "");
     }
     
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "ConstantConditions"})
     public String header()
     {
         @NullOr String header = data.options().header();
@@ -216,7 +216,7 @@ public class YamlDataFile implements UpdatableYamlDataSource
             }
             
             List<String> comments = value.comments();
-            Comments.set(data, value.key(), (comments.isEmpty()) ? null : comments);
+            Comments.above(data, value.key(), (comments.isEmpty()) ? null : comments);
         }
     }
     

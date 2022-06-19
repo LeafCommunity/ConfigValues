@@ -31,6 +31,11 @@ public interface YamlValue<V> extends KeyValue<ConfigurationSection, String, V>
         return YamlValues.builder(key, accessor);
     }
     
+    static Builder<ConfigurationSection> ofSection(String key)
+    {
+        return YamlValues.builder(key, YamlAccessors.SECTION);
+    }
+    
     static Builder<String> ofString(String key)
     {
         return of(key, YamlAccessors.STRING);
