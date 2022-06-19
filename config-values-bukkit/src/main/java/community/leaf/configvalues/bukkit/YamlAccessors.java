@@ -26,8 +26,9 @@ final class YamlAccessors
         Sections::get,
         (storage, key, updated) ->
         {
-            if (updated == null) { storage.set(key, null); }
-            else { storage.set(key, updated.getValues(true)); }
+            storage.set(key, null);
+            if (updated == null) { return; }
+            storage.createSection(key, updated.getValues(true));
         }
     );
     
