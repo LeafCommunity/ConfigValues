@@ -4,6 +4,7 @@ import com.rezzedup.util.constants.Aggregates;
 import com.rezzedup.util.constants.annotations.AggregatedResult;
 import community.leaf.configvalues.bukkit.DefaultYamlValue;
 import community.leaf.configvalues.bukkit.ExampleYamlValue;
+import community.leaf.configvalues.bukkit.data.Load;
 import community.leaf.configvalues.bukkit.migrations.Migration;
 import community.leaf.configvalues.bukkit.YamlValue;
 import community.leaf.configvalues.bukkit.data.YamlDataFile;
@@ -16,6 +17,7 @@ public class Config extends YamlDataFile
     
     public static final DefaultYamlValue<String> JOIN_MESSAGE =
         YamlValue.ofString("messages.join")
+            .comments("A message to send when a player joins the game.")
             .defaults("Hey there %player%!\nWelcome back.");
     
     public static final DefaultYamlValue<String> HELLO_MESSAGE =
@@ -24,6 +26,7 @@ public class Config extends YamlDataFile
                 Migration.move("messages.hi"),
                 Migration.move("messages.hello")
             )
+            .comments("Greet the world!")
             .defaults("Hello world.");
     
     public static final ExampleYamlValue<String> EXAMPLE_MESSAGE =
@@ -35,10 +38,14 @@ public class Config extends YamlDataFile
     
     public Config(ExampleConfigPlugin plugin)
     {
-        super(plugin.directory(), "config.yml");
+        super(plugin.directory(), "config.yml", Load.NOW);
+        
+        plugin.getLogger().info("Instantiated config.");
         
         reloadsWith(() ->
         {
+            plugin.getLogger().info("Reloading config...");
+            
             if (isInvalid()) { return; }
         
             String configVersion = get(VERSION).orElse("");

@@ -11,6 +11,7 @@ import community.leaf.configvalues.bukkit.DefaultYamlValue;
 import community.leaf.configvalues.bukkit.ExampleYamlValue;
 import community.leaf.configvalues.bukkit.YamlValue;
 import community.leaf.configvalues.bukkit.migrations.Migration;
+import community.leaf.configvalues.bukkit.util.Comments;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -110,6 +111,11 @@ public class YamlDataFile implements UpdatableYamlDataSource
                 exceptions.accept(e);
             }
         }
+        else
+        {
+            // Nothing to load, so... it's loaded!
+            isLoaded = true;
+        }
         
         if (reloadHandler != null) { reloadHandler.run(); }
     }
@@ -147,12 +153,14 @@ public class YamlDataFile implements UpdatableYamlDataSource
         backupThenSave(backupsDirectoryPath, "");
     }
     
+    @SuppressWarnings("deprecation")
     public String header()
     {
         @NullOr String header = data.options().header();
         return (header != null) ? header : "";
     }
     
+    @SuppressWarnings("deprecation")
     public void header(String header)
     {
         data.options().header(header);
@@ -213,6 +221,9 @@ public class YamlDataFile implements UpdatableYamlDataSource
                 
                 setAsDefaultIfUnset((DefaultYamlValue<?>) value);
             }
+            
+            List<String> comments = value.comments();
+            Comments.set(data, value.key(), (comments.isEmpty()) ? null : comments);
         }
     }
     

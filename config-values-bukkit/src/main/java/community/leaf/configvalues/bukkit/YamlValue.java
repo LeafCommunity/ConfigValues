@@ -93,9 +93,13 @@ public interface YamlValue<V> extends KeyValue<ConfigurationSection, String, V>
     
     List<Migration> migrations();
     
+    List<String> comments();
+    
     interface Builder<V>
     {
         Builder<V> migrates(Migration ... migrations);
+        
+        Builder<V> comments(String ... lines);
         
         YamlValue<V> maybe();
         

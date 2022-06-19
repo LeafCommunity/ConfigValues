@@ -44,6 +44,7 @@ final class YamlValues
     static class BuilderImpl<V> implements YamlValue.Builder<V>
     {
         @NullOr List<Migration> migrations = null;
+        @NullOr List<String> comments = null;
         
         final String key;
         final YamlAccessor<V> accessor;
@@ -64,23 +65,34 @@ final class YamlValues
             
             return this;
         }
-    
+        
+        @Override
+        public YamlValue.Builder<V> comments(String ... lines)
+        {
+            Objects.requireNonNull(lines, "lines");
+            
+            if (comments == null) { comments = new ArrayList<>(); }
+            Collections.addAll(comments, lines);
+            
+            return this;
+        }
+        
         @Override
         public YamlValue<V> maybe()
         {
-            return new MaybeImpl<>(key, accessor, migrations);
+            return new MaybeImpl<>(key, accessor, migrations, comments);
         }
         
         @Override
         public DefaultYamlValue<V> defaults(V def)
         {
-            return new DefaultImpl<>(key, accessor, migrations, def);
+            return new DefaultImpl<>(key, accessor, migrations, comments, def);
         }
-    
+        
         @Override
         public ExampleYamlValue<V> example(V example)
         {
-            return new ExampleImpl<>(key, accessor, migrations, example);
+            return new ExampleImpl<>(key, accessor, migrations, comments, example);
         }
     }
     
@@ -93,19 +105,29 @@ final class YamlValues
         final String key;
         final YamlAccessor<V> accessor;
         final List<Migration> migrations;
-    
-        MaybeImpl(String key, YamlAccessor<V> accessor, @NullOr List<Migration> migrations)
+        final List<String> comments;
+        
+        MaybeImpl(
+            String key,
+            YamlAccessor<V> accessor,
+            @NullOr List<Migration> migrations,
+            @NullOr List<String> comments
+        )
         {
             this.key = key;
             this.accessor = accessor;
             this.migrations = (migrations == null) ? List.of() : List.copyOf(migrations);
+            this.comments = (comments == null) ? List.of() : List.copyOf(comments);
         }
-    
+        
         @Override
         public String key() { return key; }
-    
+        
         @Override
         public List<Migration> migrations() { return migrations; }
+        
+        @Override
+        public List<String> comments() { return comments; }
         
         @Override
         public Optional<V> get(ConfigurationSection storage) { return accessor.get(storage, key); }
@@ -117,10 +139,16 @@ final class YamlValues
     static class DefaultImpl<V> extends MaybeImpl<V> implements DefaultYamlValue<V>
     {
         V def;
-    
-        DefaultImpl(String key, YamlAccessor<V> accessor, @NullOr List<Migration> migrations, V def)
+        
+        DefaultImpl(
+            String key,
+            YamlAccessor<V> accessor,
+            @NullOr List<Migration> migrations,
+            @NullOr List<String> comments,
+            V def
+        )
         {
-            super(key, accessor, migrations);
+            super(key, accessor, migrations, comments);
             this.def = Objects.requireNonNull(def, "def");
         }
         
@@ -131,9 +159,15 @@ final class YamlValues
     
     static class ExampleImpl<V> extends DefaultImpl<V> implements ExampleYamlValue<V>
     {
-        ExampleImpl(String key, YamlAccessor<V> accessor, @NullOr List<Migration> migrations, V example)
+        ExampleImpl(
+            String key,
+            YamlAccessor<V> accessor,
+            @NullOr List<Migration> migrations,
+            @NullOr List<String> comments,
+            V example
+        )
         {
-            super(key, accessor, migrations, example);
+            super(key, accessor, migrations, comments, example);
         }
     }
 }

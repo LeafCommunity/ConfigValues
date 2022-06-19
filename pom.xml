@@ -55,17 +55,8 @@
     <license.header.url>https://github.com/LeafCommunity/ConfigValues</license.header.url>
     
     <!-- Dependency versions -->
-    <versions.minecraft.spigot>1.17.1-R0.1-SNAPSHOT</versions.minecraft.spigot>
+    <versions.minecraft.spigot>1.19-R0.1-SNAPSHOT</versions.minecraft.spigot>
   </properties>
-  
-  <!--
-  <repositories>
-      <repository>
-          <id>ossrh-snapshots</id>
-          <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-      </repository>
-  </repositories>
-  -->
   
   <dependencies>
     <!-- Nullness Annotations: @NullOr (via maven-central) -->
