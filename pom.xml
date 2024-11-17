@@ -55,7 +55,7 @@
     <license.header.url>https://github.com/LeafCommunity/ConfigValues</license.header.url>
     
     <!-- Dependency versions -->
-    <versions.minecraft.spigot>1.19-R0.1-SNAPSHOT</versions.minecraft.spigot>
+    <versions.minecraft.spigot>1.21.3-R0.1-SNAPSHOT</versions.minecraft.spigot>
   </properties>
   
   <dependencies>
@@ -211,7 +211,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.2.0</version>
+            <version>3.11.1</version>
             <configuration>
               <doclint>none</doclint>
               <links>
@@ -231,7 +231,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.1</version>
             <executions>
               <execution>
                 <id>attach-sources</id>
