@@ -20,64 +20,82 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-public final class YamlAdapters
-{
-    private YamlAdapters() { throw new UnsupportedOperationException(); }
-    
-    private static <V> Adapter<Object, List<V>> list(Function<Object, @NullOr V> conversion)
-    {
-        return Adapter.of(
-            serialized ->
-            {
-                if (!(serialized instanceof List)) { return Optional.empty(); }
-                
-                List<?> existing = (List<?>) serialized;
-                List<V> values = new ArrayList<>();
-                
-                for (Object obj : existing)
-                {
-                    @NullOr V converted = conversion.apply(obj);
-                    if (converted != null) { values.add(converted); }
-                }
-                
-                return Optional.of(values);
-            },
-            Optional::of
-        );
-    }
-    
-    public static <E extends Enum<E>> Adapter<Object, E> ofEnum(Class<E> type)
-    {
-        return Adapter.of(
-            serialized -> Adapter.ofString().intoEnum(type).deserialize(String.valueOf(serialized)),
-            deserialized -> Optional.of(String.valueOf(deserialized))
-        );
-    }
-    
-    public static <V> Adapter<Object, V> ofParsed(Function<String, @NullOr V> parser)
-    {
-        return Adapter.of(
-            serialized -> {
-                try { return Optional.ofNullable(parser.apply(String.valueOf(serialized))); }
-                catch (RuntimeException ignored) { return Optional.empty(); }
-            },
-            deserialized -> Optional.of(String.valueOf(deserialized))
-        );
-    }
-    
-    public static final Adapter<Object, List<String>> STRING_LIST =
-        list(serialized ->
-            (serialized instanceof String || Primitives.isBoxed(serialized))
-                ? String.valueOf(serialized)
-                : null
-        );
-    
-    public static final Adapter<Object, List<Map<?, ?>>> MAP_LIST =
-        list(serialized -> (serialized instanceof Map<?, ?>) ? (Map<?, ?>) serialized : null);
-    
-    public static final Adapter<Object, Sound> SOUND = ofEnum(Sound.class);
-    
-    public static final Adapter<Object, Material> MATERIAL = ofEnum(Material.class);
-    
-    public static final Adapter<Object, Instant> INSTANT = ofParsed(Instant::parse);
+public final class YamlAdapters {
+	private YamlAdapters() {
+		throw new UnsupportedOperationException();
+	}
+	
+	private static <V> Adapter<Object, List<V>> list(Function<Object, @NullOr V> conversion) {
+		return Adapter.of(
+			serialized ->
+			{
+				if (!(serialized instanceof List)) {
+					return Optional.empty();
+				}
+				
+				List<?> existing = (List<?>) serialized;
+				List<V> values = new ArrayList<>();
+				
+				for (Object obj : existing) {
+					@NullOr V converted = conversion.apply(obj);
+					if (converted != null) {
+						values.add(converted);
+					}
+				}
+				
+				return Optional.of(values);
+			},
+			Optional::of
+		);
+	}
+	
+	public static <E extends Enum<E>> Adapter<Object, E> ofEnum(Class<E> type) {
+		return Adapter.of(
+			serialized -> Adapter.ofString().intoEnum(type).deserialize(String.valueOf(serialized)),
+			deserialized -> Optional.of(String.valueOf(deserialized))
+		);
+	}
+	
+	public static <V> Adapter<Object, V> ofParsed(Function<String, @NullOr V> parser) {
+		return Adapter.of(
+			serialized -> {
+				try {
+					return Optional.ofNullable(parser.apply(String.valueOf(serialized)));
+				} catch (RuntimeException ignored) {
+					return Optional.empty();
+				}
+			},
+			deserialized -> Optional.of(String.valueOf(deserialized))
+		);
+	}
+	
+	public static final Adapter<Object, List<String>> STRING_LIST =
+		list(serialized ->
+			(serialized instanceof String || Primitives.isBoxed(serialized))
+				? String.valueOf(serialized)
+				: null
+		);
+	
+	public static final Adapter<Object, List<Map<?, ?>>> MAP_LIST =
+		list(serialized -> (serialized instanceof Map<?, ?>) ? (Map<?, ?>) serialized : null);
+	
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	public static final Adapter<Object, Sound> SOUND =
+		(Enum.class.isAssignableFrom(Sound.class))
+			? ofEnum((Class<? extends Enum>) Sound.class)
+			: Adapter.of(
+					serialized -> {
+						try {
+							return Optional.of(Sound.valueOf(String.valueOf(serialized)));
+						}
+						catch (RuntimeException e) {
+							return Optional.empty();
+						}
+					},
+					deserialized -> Optional.of(deserialized.name())
+				);
+	
+	public static final Adapter<Object, Material> MATERIAL = ofEnum(Material.class);
+	
+	public static final Adapter<Object, Instant> INSTANT = ofParsed(Instant::parse);
 }
