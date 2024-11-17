@@ -8,6 +8,7 @@ import community.leaf.configvalues.bukkit.YamlValue;
 import community.leaf.configvalues.bukkit.data.Load;
 import community.leaf.configvalues.bukkit.data.YamlDataFile;
 import community.leaf.configvalues.bukkit.migrations.Migration;
+import org.bukkit.Sound;
 
 import java.util.List;
 
@@ -30,6 +31,9 @@ public class Config extends YamlDataFile {
 	
 	public static final ExampleYamlValue<String> EXAMPLE_MESSAGE =
 		YamlValue.ofString("messages.example").example("I only get set once!");
+	
+	public static final DefaultYamlValue<Sound> JOIN_SOUND =
+		YamlValue.ofSound("sounds.join").defaults(Sound.ENTITY_PLAYER_LEVELUP);
 	
 	@AggregatedResult
 	private static final List<YamlValue<?>> VALUES =

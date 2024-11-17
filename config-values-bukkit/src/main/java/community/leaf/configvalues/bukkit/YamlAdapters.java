@@ -82,7 +82,8 @@ public final class YamlAdapters {
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static final Adapter<Object, Sound> SOUND =
 		(Enum.class.isAssignableFrom(Sound.class))
-			? ofEnum((Class<? extends Enum>) Sound.class)
+			? ofEnum((Class<? extends Enum>) (Class<?>) Sound.class)
+			// TODO: prefer formal sound keys rather than legacy enum names...
 			: Adapter.of(
 					serialized -> {
 						try {
