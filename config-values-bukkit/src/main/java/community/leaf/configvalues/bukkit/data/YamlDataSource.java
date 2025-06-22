@@ -10,16 +10,16 @@ package community.leaf.configvalues.bukkit.data;
 import community.leaf.configvalues.bukkit.DefaultYamlValue;
 import community.leaf.configvalues.bukkit.YamlValue;
 import org.bukkit.configuration.ConfigurationSection;
-import pl.tlinkowski.annotation.basic.NullOr;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
 public interface YamlDataSource {
 	ConfigurationSection data();
 	
-	void set(String key, @NullOr Object value);
+	void set(String key, @Nullable Object value);
 	
-	<V> void set(YamlValue<V> key, @NullOr V value);
+	<V> void set(YamlValue<V> key, @Nullable V value);
 	
 	default boolean has(YamlValue<?> value) {
 		return value.get(data()).isPresent();

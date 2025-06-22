@@ -9,7 +9,7 @@ package community.leaf.configvalues.bukkit.migrations;
 
 import community.leaf.configvalues.bukkit.data.YamlDataSource;
 import org.bukkit.configuration.ConfigurationSection;
-import pl.tlinkowski.annotation.basic.NullOr;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -19,7 +19,7 @@ final class Migrations {
 	}
 	
 	static void copy(ConfigurationSection existing, String existingKey, YamlDataSource destination, String destinationKey) {
-		@NullOr Object maybe = existing.get(existingKey);
+		@Nullable Object maybe = existing.get(existingKey);
 		if (maybe != null) {
 			destination.set(destinationKey, maybe);
 		}

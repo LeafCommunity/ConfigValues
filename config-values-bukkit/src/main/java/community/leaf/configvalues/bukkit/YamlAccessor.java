@@ -11,7 +11,7 @@ import com.rezzedup.util.valuables.Adapter;
 import com.rezzedup.util.valuables.KeyGetter;
 import com.rezzedup.util.valuables.KeySetter;
 import org.bukkit.configuration.ConfigurationSection;
-import pl.tlinkowski.annotation.basic.NullOr;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -27,7 +27,7 @@ public interface YamlAccessor<V> extends KeyGetter<ConfigurationSection, String,
 			}
 			
 			@Override
-			public void set(ConfigurationSection storage, String key, @NullOr V updated) {
+			public void set(ConfigurationSection storage, String key, @Nullable V updated) {
 				storage.set(key, Optional.ofNullable(updated).flatMap(adapter::serialize).orElse(null));
 			}
 		};
@@ -44,7 +44,7 @@ public interface YamlAccessor<V> extends KeyGetter<ConfigurationSection, String,
 			}
 			
 			@Override
-			public void set(ConfigurationSection storage, String key, @NullOr V updated) {
+			public void set(ConfigurationSection storage, String key, @Nullable V updated) {
 				setter.set(storage, key, updated);
 			}
 		};

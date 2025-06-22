@@ -11,7 +11,7 @@ import com.rezzedup.util.constants.types.Primitives;
 import com.rezzedup.util.valuables.Adapter;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import pl.tlinkowski.annotation.basic.NullOr;
+import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public final class YamlAdapters {
 		throw new UnsupportedOperationException();
 	}
 	
-	private static <V> Adapter<Object, List<V>> list(Function<Object, @NullOr V> conversion) {
+	private static <V> Adapter<Object, List<V>> list(Function<Object, @Nullable V> conversion) {
 		return Adapter.of(
 			serialized ->
 			{
@@ -37,7 +37,7 @@ public final class YamlAdapters {
 				List<V> values = new ArrayList<>();
 				
 				for (Object obj : existing) {
-					@NullOr V converted = conversion.apply(obj);
+					@Nullable V converted = conversion.apply(obj);
 					if (converted != null) {
 						values.add(converted);
 					}
@@ -56,7 +56,7 @@ public final class YamlAdapters {
 		);
 	}
 	
-	public static <V> Adapter<Object, V> ofParsed(Function<String, @NullOr V> parser) {
+	public static <V> Adapter<Object, V> ofParsed(Function<String, @Nullable V> parser) {
 		return Adapter.of(
 			serialized -> {
 				try {

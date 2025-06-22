@@ -10,7 +10,7 @@ package community.leaf.configvalues.bukkit;
 import com.rezzedup.util.constants.types.TypeCapture;
 import community.leaf.configvalues.bukkit.migrations.Migration;
 import org.bukkit.configuration.ConfigurationSection;
-import pl.tlinkowski.annotation.basic.NullOr;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,10 +45,8 @@ final class YamlValues {
 	}
 	
 	static class BuilderImpl<V> implements YamlValue.Builder<V> {
-		@NullOr
-		List<Migration> migrations = null;
-		@NullOr
-		List<String> comments = null;
+		@Nullable List<Migration> migrations = null;
+		@Nullable List<String> comments = null;
 		
 		final String key;
 		final YamlAccessor<V> accessor;
@@ -111,8 +109,8 @@ final class YamlValues {
 		MaybeImpl(
 			String key,
 			YamlAccessor<V> accessor,
-			@NullOr List<Migration> migrations,
-			@NullOr List<String> comments
+			@Nullable List<Migration> migrations,
+			@Nullable List<String> comments
 		) {
 			this.key = key;
 			this.accessor = accessor;
@@ -141,7 +139,7 @@ final class YamlValues {
 		}
 		
 		@Override
-		public void set(ConfigurationSection storage, @NullOr V value) {
+		public void set(ConfigurationSection storage, @Nullable V value) {
 			accessor.set(storage, key, value);
 		}
 	}
@@ -152,8 +150,8 @@ final class YamlValues {
 		DefaultImpl(
 			String key,
 			YamlAccessor<V> accessor,
-			@NullOr List<Migration> migrations,
-			@NullOr List<String> comments,
+			@Nullable List<Migration> migrations,
+			@Nullable List<String> comments,
 			V def
 		) {
 			super(key, accessor, migrations, comments);
@@ -171,8 +169,8 @@ final class YamlValues {
 		ExampleImpl(
 			String key,
 			YamlAccessor<V> accessor,
-			@NullOr List<Migration> migrations,
-			@NullOr List<String> comments,
+			@Nullable List<Migration> migrations,
+			@Nullable List<String> comments,
 			V example
 		) {
 			super(key, accessor, migrations, comments, example);

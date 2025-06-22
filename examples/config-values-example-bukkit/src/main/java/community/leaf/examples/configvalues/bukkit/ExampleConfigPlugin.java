@@ -4,14 +4,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.tlinkowski.annotation.basic.NullOr;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Path;
 
 public class ExampleConfigPlugin extends JavaPlugin implements Listener {
-	private @NullOr Path dataDirectory;
-	private @NullOr Path backupsDirectory;
-	private @NullOr Config config;
+	private @Nullable Path dataDirectory;
+	private @Nullable Path backupsDirectory;
+	private @Nullable Config config;
 	
 	@Override
 	public void onEnable() {
@@ -23,7 +24,7 @@ public class ExampleConfigPlugin extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(this, this);
 	}
 	
-	private <T> T initialized(@NullOr T thing, String name) {
+	private <T> T initialized(@Nullable T thing, String name) {
 		if (thing != null) {
 			return thing;
 		}

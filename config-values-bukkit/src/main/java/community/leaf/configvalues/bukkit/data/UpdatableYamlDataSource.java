@@ -8,7 +8,7 @@
 package community.leaf.configvalues.bukkit.data;
 
 import community.leaf.configvalues.bukkit.YamlValue;
-import pl.tlinkowski.annotation.basic.NullOr;
+import org.jspecify.annotations.Nullable;
 
 public interface UpdatableYamlDataSource extends YamlDataSource {
 	boolean isUpdated();
@@ -16,13 +16,13 @@ public interface UpdatableYamlDataSource extends YamlDataSource {
 	void updated(boolean state);
 	
 	@Override
-	default void set(String key, @NullOr Object value) {
+	default void set(String key, @Nullable Object value) {
 		updated(true);
 		data().set(key, value);
 	}
 	
 	@Override
-	default <T> void set(YamlValue<T> key, @NullOr T value) {
+	default <T> void set(YamlValue<T> key, @Nullable T value) {
 		updated(true);
 		key.set(data(), value);
 	}

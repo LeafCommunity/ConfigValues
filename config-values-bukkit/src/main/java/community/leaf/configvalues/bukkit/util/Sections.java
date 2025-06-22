@@ -8,7 +8,7 @@
 package community.leaf.configvalues.bukkit.util;
 
 import org.bukkit.configuration.ConfigurationSection;
-import pl.tlinkowski.annotation.basic.NullOr;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -30,7 +30,7 @@ public class Sections {
 	
 	public static ConfigurationSection getOrCreate(ConfigurationSection section, String key) {
 		validate(section, key);
-		@NullOr ConfigurationSection existing = section.getConfigurationSection(key);
+		@Nullable ConfigurationSection existing = section.getConfigurationSection(key);
 		return (existing != null) ? existing : section.createSection(key);
 	}
 	

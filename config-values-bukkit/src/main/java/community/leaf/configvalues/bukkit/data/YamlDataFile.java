@@ -15,7 +15,7 @@ import community.leaf.configvalues.bukkit.util.Comments;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import pl.tlinkowski.annotation.basic.NullOr;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.URI;
@@ -39,8 +39,8 @@ public class YamlDataFile implements UpdatableYamlDataSource {
 	private int reloads = 0;
 	private boolean isUpdated = false;
 	private boolean isNewlyCreated = false;
-	private @NullOr Exception invalidReason = null;
-	private @NullOr Runnable reloadHandler = null;
+	private @Nullable Exception invalidReason = null;
+	private @Nullable Runnable reloadHandler = null;
 	
 	public YamlDataFile(Path directoryPath, String name) {
 		this(directoryPath, name, Load.NOW);
@@ -87,7 +87,7 @@ public class YamlDataFile implements UpdatableYamlDataSource {
 		return invalidReason != null;
 	}
 	
-	public @NullOr Exception getInvalidReason() {
+	public @Nullable Exception getInvalidReason() {
 		return invalidReason;
 	}
 	
@@ -156,7 +156,7 @@ public class YamlDataFile implements UpdatableYamlDataSource {
 	
 	@SuppressWarnings({"deprecation", "ConstantConditions"})
 	public String header() {
-		@NullOr String header = data.options().header();
+		@Nullable String header = data.options().header();
 		return (header != null) ? header : "";
 	}
 	
@@ -171,7 +171,7 @@ public class YamlDataFile implements UpdatableYamlDataSource {
 		Objects.requireNonNull(resource, "resource");
 		
 		try {
-			@NullOr URL resourceUrl = getClass().getClassLoader().getResource(resource);
+			@Nullable URL resourceUrl = getClass().getClassLoader().getResource(resource);
 			if (resourceUrl == null) {
 				throw new IllegalStateException("No such resource: " + resource);
 			}

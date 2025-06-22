@@ -24,8 +24,7 @@ final class YamlAccessors {
 	
 	static final YamlAccessor<ConfigurationSection> SECTION = YamlAccessor.of(
 		Sections::get,
-		(storage, key, updated) ->
-		{
+		(storage, key, updated) -> {
 			storage.set(key, null);
 			if (updated == null) {
 				return;
