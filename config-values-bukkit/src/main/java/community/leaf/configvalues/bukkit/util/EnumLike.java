@@ -1,0 +1,28 @@
+/*
+ * Copyright © 2021-2025, RezzedUp <https://github.com/LeafCommunity/ConfigValues>
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+package community.leaf.configvalues.bukkit.util;
+
+import java.util.Optional;
+
+public interface EnumLike<T> {
+	
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	static <T> EnumLike<T> of(Class<T> type) {
+		if (Enum.class.isAssignableFrom(type)) {
+			return new EnumLikeImpl.Direct(type);
+		}
+		
+		return new EnumLikeImpl.Indirect<>(type);
+	}
+
+	Optional<T> valueOf(String name);
+	
+	int ordinal(T thing);
+	
+	String name(T thing);
+}

@@ -9,6 +9,7 @@ package community.leaf.configvalues.bukkit;
 
 import com.rezzedup.util.constants.types.Primitives;
 import com.rezzedup.util.valuables.Adapter;
+import community.leaf.configvalues.bukkit.util.EnumLike;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.jspecify.annotations.Nullable;
@@ -49,10 +50,12 @@ public final class YamlAdapters {
 		);
 	}
 	
-	public static <E extends Enum<E>> Adapter<Object, E> ofEnum(Class<E> type) {
+	public static <E> Adapter<Object, E> ofEnumLike(Class<E> type) {
+		EnumLike<E> accessor = EnumLike.of(type);
+		
 		return Adapter.of(
-			serialized -> Adapter.ofString().intoEnum(type).deserialize(String.valueOf(serialized)),
-			deserialized -> Optional.of(String.valueOf(deserialized))
+			serialized -> accessor.valueOf(String.valueOf(serialized)),
+			deserialized -> Optional.of(accessor.name(deserialized))
 		);
 	}
 	
@@ -79,24 +82,9 @@ public final class YamlAdapters {
 	public static final Adapter<Object, List<Map<?, ?>>> MAP_LIST =
 		list(serialized -> (serialized instanceof Map<?, ?>) ? (Map<?, ?>) serialized : null);
 	
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	public static final Adapter<Object, Sound> SOUND =
-		(Enum.class.isAssignableFrom(Sound.class))
-			? ofEnum((Class<? extends Enum>) (Class<?>) Sound.class)
-			// TODO: prefer formal sound keys rather than legacy enum names...
-			: Adapter.of(
-					serialized -> {
-						try {
-							return Optional.of(Sound.valueOf(String.valueOf(serialized)));
-						}
-						catch (RuntimeException e) {
-							return Optional.empty();
-						}
-					},
-					deserialized -> Optional.of(deserialized.name())
-				);
+	public static final Adapter<Object, Sound> SOUND = ofEnumLike(Sound.class);
 	
-	public static final Adapter<Object, Material> MATERIAL = ofEnum(Material.class);
+	public static final Adapter<Object, Material> MATERIAL = ofEnumLike(Material.class);
 	
 	public static final Adapter<Object, Instant> INSTANT = ofParsed(Instant::parse);
 }

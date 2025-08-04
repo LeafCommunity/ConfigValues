@@ -27,14 +27,11 @@ final class YamlValues {
 	//  Type tokens
 	//
 	
-	static final TypeCapture<YamlValue<?>> TYPE = new TypeCapture<>() {
-	};
+	static final TypeCapture<YamlValue<?>> TYPE = new TypeCapture<>() {};
 	
-	static final TypeCapture<DefaultYamlValue<?>> DEFAULT_TYPE = new TypeCapture<>() {
-	};
+	static final TypeCapture<DefaultYamlValue<?>> DEFAULT_TYPE = new TypeCapture<>() {};
 	
-	static final TypeCapture<ExampleYamlValue<?>> EXAMPLE_TYPE = new TypeCapture<>() {
-	};
+	static final TypeCapture<ExampleYamlValue<?>> EXAMPLE_TYPE = new TypeCapture<>() {};
 	
 	//
 	//  Builders
